@@ -1,35 +1,55 @@
 /* styles.css */
 
-/* Estilos básicos y tipografía */
-body {
-    font-family: 'Lato', sans-serif;
-    background-color: #f5f5f5;
-    color: #444;
+/* Reset de estilos y tipografía */
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+body {
+    font-family: 'Lato', sans-serif;
+    background-color: #f5f5f5;
+    color: #444;
+    line-height: 1.6;
+}
+
 h1 {
     text-align: center;
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 300;
-    margin-top: 0;
-    margin-bottom: 1.5rem;
+    margin: 1rem 0;
 }
+
+
 header {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-  }
+}
+
+/* Estilos para el header */
 /* Estilos para el header */
 header#titulo {
     background-color: #3498db;
-    padding: 2rem 0;
     margin-bottom: 2.5rem;
     color: #ffffff;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
+
+header#titulo > * {
+    padding: 0.5rem 0;
+}
+
 
 /* Estilos para elementos de formulario y contenedores */
 form, #shiftForm {
@@ -37,16 +57,22 @@ form, #shiftForm {
     flex-direction: column;
     align-items: center;
     max-width: 600px;
-    margin: 0 auto;
+    margin: 0 auto 2.5rem;
     background-color: #ffffff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 6px;
     padding: 2rem;
 }
 
-label, input, select, button {
+label {
+    display: block;
     font-size: 1.2rem;
-    margin-bottom: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+input, select, button {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
     width: 100%;
 }
 
@@ -59,16 +85,17 @@ input[type="date"], select {
 }
 
 /* Estilos para botones y estados */
-button {
+button, a.button {
     padding: 0.6rem 1.8rem;
     border-radius: 6px;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
+    transition: background-color 0.3s, transform 0.3s, color 0.3s;
     font-weight: bold;
+    text-align: center;
 }
 
-button#calculateButton, button#submitShiftButton {
+button#calculateButton, button#submitShiftButton, a.button {
     background-color: #3498db;
     color: #ffffff;
 }
@@ -122,6 +149,7 @@ thead th {
     background-color: #ecf0f1;
     text-align: left;
     padding: 0.8rem 1rem;
+    font-weight: 600;
 }
 
 tbody td {
@@ -135,20 +163,9 @@ tbody tr:nth-child(odd) {
 tbody tr:nth-child(even) {
     background-color: #ffffff;
 }
-a.button {
-    display: inline-block;
-    color: black;
-    background-color: #f6f8f7;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-weight: bold;
-    margin-top: 1em;
-    transition: background-color 0.3s;
-  }
 
-  a.button:hover {
-    background-color: #098b35;
-    color: #fffbfb;
-    
-  }
+a.button {
+    font-size: 1.2rem;
+    padding: 6px 12px;
+    margin-top: 0.5em;
+}

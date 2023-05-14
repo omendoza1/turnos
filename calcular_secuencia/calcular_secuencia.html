@@ -13,18 +13,18 @@
     <header id="titulo">
         <h1>Secuencia de Turnos</h1>
         <a href="../index.html" class="button">Ver tutorial</a>
-      
+
     </header>
-   
+
     <form id="shiftForm" onsubmit="return false;">
         <label for="startDate">Seleccione la fecha de inicio:</label>
-        <input type="date" id="startDate" onchange="enableEndDate()" required>
+        <input type="date" id="startDate" onchange="enableEndDate(); checkDateFields();" required>
         <br>
         <label for="endDate">Seleccione la fecha de fin:</label>
-        <input type="date" id="endDate" onchange="enableFirstShift()" disabled required>
+        <input type="date" id="endDate" onchange="enableFirstShift(); checkDateFields();" disabled required>
         <br>
         <label for="firstShift">Seleccione el primer turno:</label>
-        <select id="firstShift" onchange="updateSecondShiftOptions()" disabled required>
+        <select id="firstShift" onchange="updateSecondShiftOptions(); checkDateFields();" disabled required>
             <option value="" selected disabled>Selecciona un turno</option>
             <option value="día">día</option>
             <option value="noche">noche</option>
@@ -32,7 +32,7 @@
         </select>
         <br>
         <label for="secondShift">Seleccione el segundo turno:</label>
-        <select id="secondShift" onchange="enableCalculateButton()" disabled required>
+        <select id="secondShift" onchange="checkDateFields();" disabled required>
             <option value="" selected disabled>Selecciona un turno</option>
         </select>
         <br>

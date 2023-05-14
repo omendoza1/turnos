@@ -1,3 +1,17 @@
+function checkDateFields() {
+    let startDate = document.getElementById("startDate");
+    let endDate = document.getElementById("endDate");
+    let firstShift = document.getElementById("firstShift");
+    let secondShift = document.getElementById("secondShift");
+    let calculateButton = document.getElementById("calculateButton");
+
+    if (startDate.value === "" || endDate.value === "" || firstShift.value === "" || secondShift.value === "") {
+        calculateButton.disabled = true;
+    } else {
+        calculateButton.disabled = false;
+    }
+}
+
 function updateSecondShiftOptions() {
     let firstShift = document.getElementById("firstShift").value;
     let secondShift = document.getElementById("secondShift");
