@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual de Usuario: Secuencia de Turnos</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap">
+  <style>
+    :root {
+      --main-color: #0d6efd;
+      --secondary-color: #212529;
+      --light-color: #f8f9fa;
+    }
+  
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+      background-color: var(--light-color);
+    }
+  
+    h1, h2 {
+      color: var(--secondary-color);
+      margin-bottom: 0.75em;
+    }
+  
+    h2 {
+      margin-top: 1.5em;
+      border-bottom: 2px solid var(--main-color);
+      padding-bottom: 0.5em;
+    }
+  
+    ol, ul {
+      padding-left: 1.5em;
+    }
+  
+    ul {
+      list-style-type: none;
+    }
+  
+    li {
+      margin-bottom: 10px;
+    }
+  
+    a.button {
+      display: inline-block;
+      background-color: var(--main-color);
+      color: var(--light-color);
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-weight: bold;
+      margin-top: 1em;
+      transition: background-color 0.3s;
+    }
+  
+    a.button:hover {
+      background-color: #0a58ca;
+    }
+  
+    p {
+      color: var(--secondary-color);
+    }
+  </style>
+</head>
+<body>
+  <h1>Manual de Usuario: Secuencia de Turnos</h1>
+  <h2>Introducción</h2>
+  <p>Este manual de usuario te guiará en el proceso de utilizar la página web "Secuencia de Turnos" para calcular y visualizar la secuencia de turnos de trabajo entre dos fechas.</p>
+  <h2>Instrucciones</h2>
+  <ol>
+    <li>Selecciona la fecha de inicio: Haz clic en el campo "Seleccione la fecha de inicio" y elige la fecha en la que deseas comenzar la secuencia de turnos.</li>
+    <li>Selecciona la fecha de fin: Una vez que selecciones la fecha de inicio, el campo "Seleccione la fecha de fin" se habilitará. Haz clic en este campo y elige la fecha en la que deseas finalizar la secuencia de turnos. La fecha de fin debe ser posterior a la fecha de inicio.</li>
+    <li>Selecciona el primer turno: Con las fechas de inicio y fin seleccionadas, el campo "Seleccione el primer turno" se habilitará. Elige el turno de trabajo que deseas comenzar la secuencia (día, noche o descanso).</li>
+    <li>Selecciona el segundo turno: Al seleccionar el primer turno, el campo "Seleccione el segundo turno" se habilitará. Elige el turno de trabajo que seguirá al primer turno seleccionado. Las opciones disponibles dependerán del primer turno que hayas seleccionado.</li>
+    <li>Calcula la secuencia de turnos: Con todos los campos completados, haz clic en el botón "Calcular secuencia". La página calculará la secuencia de turnos y la mostrará en una tabla debajo del formulario.</li>
+    <li>Limpiar y comenzar de nuevo: Si deseas calcular una nueva secuencia de turnos, haz clic en el botón "Limpiar". Esto borrará todos los campos y resultados anteriores, permitiéndote comenzar de nuevo.</li>
+  </ol>
+  <h2>Interpretación de los resultados</h2>
+  <p>La secuencia de turnos se mostrará en una tabla debajo del formulario. La tabla estará dividida por meses y años, mostrando la fecha y el turno correspondiente en cada fila.</p>
+  <p>Las columnas de la tabla son las siguientes:</p>
+  <ul>
+    <li>Fecha: Muestra la fecha en formato AAAA-MM-DD.</li>
+    <li>Turno: Muestra el turno de trabajo correspondiente a la fecha (día, noche o descanso).</li>
+  </ul>
+  <p>Puedes revisar los resultados para cada mes y año en las tablas correspondientes.</p>
+  <a href="calcular_secuencia/calcular_secuencia.html" class="button">Probar la calculadora</a>
+</body>
+</html>

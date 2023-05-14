@@ -1,0 +1,154 @@
+/* styles.css */
+
+/* Estilos básicos y tipografía */
+body {
+    font-family: 'Lato', sans-serif;
+    background-color: #f5f5f5;
+    color: #444;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 300;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+/* Estilos para el header */
+header#titulo {
+    background-color: #3498db;
+    padding: 2rem 0;
+    margin-bottom: 2.5rem;
+    color: #ffffff;
+}
+
+/* Estilos para elementos de formulario y contenedores */
+form, #shiftForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    padding: 2rem;
+}
+
+label, input, select, button {
+    font-size: 1.2rem;
+    margin-bottom: 1.2rem;
+    width: 100%;
+}
+
+input[type="date"], select {
+    padding: 0.6rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #f5f5f5;
+    outline: none;
+}
+
+/* Estilos para botones y estados */
+button {
+    padding: 0.6rem 1.8rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    font-weight: bold;
+}
+
+button#calculateButton, button#submitShiftButton {
+    background-color: #3498db;
+    color: #ffffff;
+}
+
+button#calculateButton:hover, button#submitShiftButton:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+button#clearButton, button#cancelShiftButton {
+    background-color: #e74c3c;
+    color: #ffffff;
+}
+
+button#clearButton:hover, button#cancelShiftButton:hover {
+    background-color: #c0392b;
+    transform: translateY(-2px);
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Estilos para la sección de resultados */
+div#result {
+    text-align: center;
+    max-width: 90%;
+    margin: 2.5rem auto;
+    padding: 1.5rem;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+/* Estilos para la tabla de resultados */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.2rem;
+}
+
+caption {
+    font-weight: 300;
+    font-size: 1.4rem;
+    padding: 0.8rem 0;
+}
+
+thead th {
+    background-color: #ecf0f1;
+    text-align: left;
+    padding: 0.8rem 1rem;
+}
+
+tbody td {
+    padding: 0.8rem 1rem;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #fbfbfb;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #ffffff;
+}
+a.button {
+    display: inline-block;
+    color: black;
+    background-color: #f6f8f7;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-top: 1em;
+    transition: background-color 0.3s;
+  }
+
+  a.button:hover {
+    background-color: #098b35;
+    color: #fffbfb;
+    
+  }

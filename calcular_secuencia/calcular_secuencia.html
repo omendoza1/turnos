@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secuencia de Turnos</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="scripts.js" defer></script>
+</head>
+
+<body>
+    <header id="titulo">
+        <h1>Secuencia de Turnos</h1>
+        <a href="../index.html" class="button">Ver tutorial</a>
+      
+    </header>
+   
+    <form id="shiftForm" onsubmit="return false;">
+        <label for="startDate">Seleccione la fecha de inicio:</label>
+        <input type="date" id="startDate" onchange="enableEndDate()" required>
+        <br>
+        <label for="endDate">Seleccione la fecha de fin:</label>
+        <input type="date" id="endDate" onchange="enableFirstShift()" disabled required>
+        <br>
+        <label for="firstShift">Seleccione el primer turno:</label>
+        <select id="firstShift" onchange="updateSecondShiftOptions()" disabled required>
+            <option value="" selected disabled>Selecciona un turno</option>
+            <option value="día">día</option>
+            <option value="noche">noche</option>
+            <option value="descanso">descanso</option>
+        </select>
+        <br>
+        <label for="secondShift">Seleccione el segundo turno:</label>
+        <select id="secondShift" onchange="enableCalculateButton()" disabled required>
+            <option value="" selected disabled>Selecciona un turno</option>
+        </select>
+        <br>
+        <button id="calculateButton" onclick="calculateSequence()" disabled>Calcular secuencia</button>
+        <button id="clearButton" onclick="clearData()" disabled>Limpiar</button>
+    </form>
+    <div id="result"></div>
+    <script src="calcular_secuencia.js" defer></script>
+</body>
+
+</html>
