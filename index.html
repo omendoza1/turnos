@@ -1,116 +1,1081 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manual de Usuario: Secuencia de Turnos</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    :root {
-      --main-color: #0d6efd;
-      --secondary-color: #212529;
-      --light-color: #f8f9fa;
-      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secuencia de Turnos y Liquidación Ley 2026</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,600,700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* ==================== ESTILOS GENERALES ==================== */
+        :root {
+            --main-color: #2c3e50;
+            --accent-color: #3498db;
+            --accent-hover: #2980b9;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --danger-hover: #c0392b;
+            --light-color: #f8f9fa;
+            --bg-color: #ecf0f1;
+            --border-color: #bdc3c7;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
 
-    body {
-      font-family: 'Roboto', Arial, sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      line-height: 1.6;
-      background-color: var(--light-color);
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    h1, h2 {
-      color: var(--secondary-color);
-      margin-bottom: 0.75em;
-    }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: #333;
+            line-height: 1.6;
+        }
 
-    h1 {
-      font-size: 2.5em;
-      text-align: center;
-      margin-top: 0.5em;
-    }
+        /* Navbar / Tabs */
+        nav {
+            background-color: var(--main-color);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
 
-    h2 {
-      margin-top: 1.5em;
-      border-bottom: 2px solid var(--main-color);
-      padding-bottom: 0.5em;
-      font-size: 1.75em;
-    }
+        nav button {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            padding: 1rem 1.5rem;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-    ol, ul {
-      padding-left: 1.5em;
-    }
+        nav button:hover, nav button.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
 
-    ul {
-      list-style-type: none;
-    }
+        /* Contenedores */
+        .section-container {
+            display: none;
+            padding: 30px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+            animation: fadeIn 0.4s ease-in-out;
+        }
 
-    li {
-      margin-bottom: 10px;
-    }
-    ol {
-  counter-reset: step;
-  list-style-type: none;
-}
-    a.button {
-      display: inline-block;
-      background-color: var(--main-color);
-      color: var(--light-color);
-      text-decoration: none;
-      padding: 15px 30px;
-      border-radius: 4px;
-      font-weight: bold;
-      margin-top: 1em;
-      transition: background-color 0.3s;
-      box-shadow: var(--box-shadow);
-    }
+        .section-container.active {
+            display: block;
+        }
 
-    a.button:hover {
-      background-color: #0a58ca;
-    }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    p {
-      color: var(--secondary-color);
-    }
+        h1, h2 {
+            text-align: center;
+            color: var(--main-color);
+            margin-bottom: 1.5rem;
+        }
 
-    .step-number {
-      display: inline-block;
-      width: 30px;
-      height: 30px;
-      background-color: var(--main-color);
-      color: var(--light-color);
-      font-weight: bold;
-      text-align: center;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-  </style>
+        h1 { font-size: 2.2rem; }
+
+        /* ==================== FORMULARIOS ==================== */
+        .card {
+            background-color: #ffffff;
+            box-shadow: var(--box-shadow);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid { grid-template-columns: 1fr; }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--main-color);
+        }
+
+        input, select {
+            font-size: 1.05rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--light-color);
+            outline: none;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--accent-color);
+        }
+
+        .btn-container {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        button.action-btn {
+            flex: 1;
+            padding: 0.9rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary { background-color: var(--accent-color); }
+        .btn-primary:hover:not(:disabled) { background-color: var(--accent-hover); transform: translateY(-2px); }
+        
+        .btn-danger { background-color: var(--danger-color); }
+        .btn-danger:hover:not(:disabled) { background-color: var(--danger-hover); transform: translateY(-2px); }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            transform: none !important;
+        }
+
+        /* ==================== TABLAS DE TURNOS ==================== */
+        .legend {
+            background-color: #e8f4f8;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--accent-color);
+        }
+
+        .legend h3 {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            color: var(--main-color);
+            text-align: left;
+        }
+
+        .legend ul {
+            list-style-type: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+            background: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+
+        caption {
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 1rem;
+            background-color: var(--main-color);
+            color: white;
+        }
+
+        thead th {
+            background-color: #34495e;
+            color: #ffffff;
+            text-align: center;
+            padding: 0.8rem 0.5rem;
+        }
+
+        tbody td, tfoot td {
+            padding: 0.6rem 0.5rem;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tbody tr:nth-child(even) { background-color: #f9f9f9; }
+        tbody tr:hover { background-color: #f1f5f9; }
+
+        tfoot { background-color: #f4f6f7; }
+        tfoot td { font-weight: bold; border-bottom: none; font-size: 1.05rem; }
+
+        /* ==================== DESPRENDIBLE DE NÓMINA ==================== */
+        .payroll-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        @media (min-width: 992px) {
+            .payroll-grid.multi-col {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .payroll-slip {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 2rem;
+            border-top: 6px solid var(--success-color);
+            animation: fadeIn 0.6s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .payroll-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .payroll-header h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            text-align: left;
+        }
+
+        .payroll-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #eee;
+            font-size: 0.95rem;
+        }
+
+        .payroll-row.bold { font-weight: bold; color: var(--main-color); }
+        .payroll-row.subtotal { background-color: #f8f9fa; padding: 0.8rem; font-weight: bold; margin-top: auto; border-radius: 4px; }
+        .payroll-row.discount { color: var(--danger-color); }
+        
+        .payroll-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--success-color);
+            color: white;
+            padding: 1.2rem;
+            border-radius: 8px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        .badge {
+            background: #ecf0f1;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--main-color);
+            margin-left: 10px;
+        }
+
+        /* ==================== AUDITORIA Y CONSOLIDADO ==================== */
+        .audit-box {
+            margin-top: 1.5rem; 
+            background: #fcfcfc; 
+            padding: 1.2rem; 
+            border-radius: 8px; 
+            border: 1px solid #dcdde1;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+        
+        .audit-box h4 {
+            margin-bottom: 1rem; 
+            color: var(--main-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .consolidation-box {
+            background-color: #2c3e50;
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-top: 3rem;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .consolidation-box h2 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .consolidation-amount {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* ==================== ALERTAS Y MENSAJES ==================== */
+        .instruction-list {
+            list-style: none;
+            counter-reset: step;
+        }
+        .instruction-list li {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 1.5rem;
+            background: white;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            padding-right: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .instruction-list li::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 10px;
+            top: 15px;
+            width: 30px;
+            height: 30px;
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: bold;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            border: 1px solid #bee5eb;
+            font-size: 0.95rem;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            border: 1px solid #ffeeba;
+            font-size: 0.95rem;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            border: 1px solid #c3e6cb;
+            font-size: 0.95rem;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            border: 1px solid #f5c6cb;
+            font-size: 0.95rem;
+        }
+    </style>
 </head>
+
 <body>
-  <h1><i class="fas fa-calendar-alt"></i> Manual de Usuario: Secuencia de Turnos</h1>
-  <h2>Introducción</h2>
-  <p>Este manual de usuario te guiará en el proceso de utilizar la página web "Secuencia de Turnos" para calcular y visualizar la secuencia de turnos de trabajo entre dos fechas.</p>
-  <h2>Instrucciones</h2>
-  <ol>
-    <li><span class="step-number">1</span>Selecciona la fecha de inicio: Haz clic en el campo "Seleccione la fecha de inicio" y elige la fecha en la que deseas comenzar la secuencia de turnos.</li>
-    <li><span class="step-number">2</span>Selecciona la fecha de fin: Una vez que selecciones la fecha de inicio, el campo "Seleccione la fecha de fin" se habilitará. Haz clic en este campo y elige la fecha en la que deseas finalizar la secuencia de turnos. La fecha de fin debe ser posterior a la fecha de inicio.</li>
-    <li><span class="step-number">3</span>Selecciona el primer turno: Con las fechas de inicio y fin seleccionadas, el campo "Seleccione el primer turno" se habilitará. Elige el turno de trabajo que deseas comenzar la secuencia (día, noche o descanso).</li>
-    <li><span class="step-number">4</span>Selecciona el segundo turno: Al seleccionar el primer turno, el campo "Seleccione el segundo turno" se habilitará. Elige el turno de trabajo que seguirá al primer turno seleccionado. Las opciones disponibles dependerán del primer turno que hayas seleccionado.</li>
-    <li><span class="step-number">5</span>Calcula la secuencia de turnos: Con todos los campos completados, haz clic en el botón "Calcular secuencia". La página calculará la secuencia de turnos y la mostrará en una tabla debajo del formulario.</li>
-    <li><span class="step-number">6</span>Limpiar y comenzar de nuevo: Si deseas calcular una nueva secuencia de turnos, haz clic en el botón "Limpiar". Esto borrará todos los campos y resultados anteriores, permitiéndote comenzar de nuevo.</li>
-  </ol>
-  <h2>Interpretación de los resultados</h2>
-  <p>La secuencia de turnos se mostrará en una tabla debajo del formulario. La tabla estará dividida por meses y años, mostrando la fecha y el turno correspondiente en cada fila.</p>
-  <p>Las columnas de la tabla son las siguientes:</p>
-  <ul>
-    <li>Fecha: Muestra la fecha en formato AAAA-MM-DD.</li>
-    <li>Turno: Muestra el turno de trabajo correspondiente a la fecha (día, noche o descanso).</li>
-  </ul>
-  <p>Puedes revisar los resultados para cada mes y año en las tablas correspondientes.</p>
-  <a href="calcular_secuencia/calcular_secuencia.html" class="button">Probar la calculadora</a>
+    <!-- Menú de Navegación -->
+    <nav>
+        <button id="btn-calc" class="active" onclick="switchTab('calc')"><i class="fas fa-calendar-alt"></i> Turnos y Liquidación</button>
+        <button id="btn-config" onclick="switchTab('config')"><i class="fas fa-cog"></i> Configuración Salarial</button>
+        <button id="btn-manual" onclick="switchTab('manual')"><i class="fas fa-book"></i> Manual e Info Legal</button>
+    </nav>
+
+    <!-- 1. SECCIÓN: CALCULADORA Y LIQUIDACIÓN -->
+    <div id="calc" class="section-container active">
+        <h1><i class="fas fa-calculator"></i> Calculadora y Nómina Automática</h1>
+        
+        <div class="card">
+            <form id="shiftForm" onsubmit="return false;" class="form-grid">
+                
+                <div class="form-group full-width">
+                    <label for="payPeriod"><i class="fas fa-filter"></i> Tipo de Liquidación / Vista:</label>
+                    <select id="payPeriod" onchange="checkDateFields();" style="border: 2px solid var(--accent-color);">
+                        <option value="mensual">Vista por Meses Completos</option>
+                        <option value="quincenal" selected>Vista Desglosada por Quincenas (1-15 y 16-fin)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="startDate">Fecha de inicio del periodo:</label>
+                    <input type="date" id="startDate" onchange="enableEndDate(); checkDateFields();" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="endDate">Fecha de fin del periodo:</label>
+                    <input type="date" id="endDate" onchange="enableFirstShift(); checkDateFields();" disabled required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="firstShift">Primer turno de la secuencia (2x2):</label>
+                    <select id="firstShift" onchange="updateSecondShiftOptions(); checkDateFields();" disabled required>
+                        <option value="" selected disabled>Selecciona un turno</option>
+                        <option value="día">Día (12 horas)</option>
+                        <option value="noche">Noche (12 horas)</option>
+                        <option value="descanso">Descanso</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="secondShift">Segundo turno:</label>
+                    <select id="secondShift" onchange="checkDateFields();" disabled required>
+                        <option value="" selected disabled>Selecciona un turno</option>
+                    </select>
+                </div>
+                
+                <div class="btn-container">
+                    <button id="calculateButton" class="action-btn btn-primary" onclick="calculateSequence()" disabled>
+                        <i class="fas fa-cogs"></i> Generar y Liquidar
+                    </button>
+                    <button id="clearButton" class="action-btn btn-danger" onclick="clearData()" disabled>
+                        <i class="fas fa-trash-alt"></i> Limpiar
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Aquí se inyectan las tablas de turnos -->
+        <div id="result"></div>
+        
+        <!-- Aquí se inyecta la nómina y la auditoría -->
+        <div id="payroll-container"></div>
+    </div>
+
+    <!-- 2. SECCIÓN: CONFIGURACIÓN SALARIAL -->
+    <div id="config" class="section-container">
+        <h1><i class="fas fa-sliders-h"></i> Configuración Salarial</h1>
+        
+        <div class="card">
+            <div class="alert-info">
+                <strong><i class="fas fa-balance-scale"></i> Jurisprudencia Aplicada (Ley 1920 y Ley 2466 de 2025):</strong> 
+                Esta herramienta calcula tu salario base sobre el <strong>Mes Comercial (30 días)</strong> según el Código Sustantivo del Trabajo. Los recargos y extras, sin embargo, se suman con exactitud para <strong>todos</strong> los días trabajados en tu secuencia, incluyendo meses de 31 días.
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Salario Base Mensual ($):</label>
+                    <input type="number" id="cfgBase" value="1750905">
+                </div>
+                <div class="form-group">
+                    <label>Auxilio de Transporte ($):</label>
+                    <input type="number" id="cfgTransport" value="249095">
+                </div>
+                <div class="form-group">
+                    <label>Divisor Horas Mes (VHO):</label>
+                    <input type="number" id="cfgDivisor" value="220" title="Divisor para jornada 44h 2026">
+                </div>
+                <div class="form-group">
+                    <label>Descuento Salud (%):</label>
+                    <input type="number" id="cfgSalud" value="4" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label>Descuento Pensión (%):</label>
+                    <input type="number" id="cfgPension" value="4" step="0.1">
+                </div>
+            </div>
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--success-color);">
+                <i class="fas fa-check-circle"></i> Los cambios se guardan automáticamente y se aplicarán en el próximo cálculo.
+            </p>
+        </div>
+    </div>
+
+    <!-- 3. SECCIÓN: MANUAL DE USUARIO Y SOPORTE LEGAL -->
+    <div id="manual" class="section-container">
+        <h1><i class="fas fa-book-reader"></i> Manual de Usuario y Base Legal</h1>
+        
+        <div class="card">
+            <div class="alert-warning" style="background-color: #e8f4f8; border-color: #b8daff; color: #004085;">
+                <h2><i class="fas fa-gavel"></i> Marco Legal: Circular 0040, CST y Ley 2466</h2>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li><strong>Mes Comercial (Código Sustantivo del Trabajo):</strong> Todos los meses se liquidan en base a 30 días comerciales. La herramienta detecta automáticamente si seleccionas una quincena (1-15 o 16-fin) y asigna los 15 días comerciales de salario base correspondientes, sin importar si el mes tiene 28, 30 o 31 días.</li>
+                    <li><strong>Pago Día 31 (Ley 1920 de 2018):</strong> Aunque el salario base se congela en 30 días, <em>todos los recargos y horas extras generados el día 31 SÍ son pagos</em>. La tabla de turnos rastrea cada día laborado y suma esos recargos al valor total.</li>
+                    <li><strong>Límite Semanal y Extras (Circular 0040):</strong> La herramienta no superará 8 horas ordinarias y un máximo de 4 horas extras por turno. Audita automáticamente para no sobrepasar las 60 horas semanales permitidas.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== LÓGICA JAVASCRIPT ==================== -->
+    <script>
+        // --- NAVEGACIÓN ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.section-container').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+
+        // --- FORMULARIOS Y VALIDACIONES ---
+        function checkDateFields() {
+            let startDate = document.getElementById("startDate").value;
+            let endDate = document.getElementById("endDate").value;
+            let firstShift = document.getElementById("firstShift").value;
+            let secondShift = document.getElementById("secondShift").value;
+            document.getElementById("calculateButton").disabled = !(startDate && endDate && firstShift && secondShift);
+        }
+
+        function updateSecondShiftOptions() {
+            let firstShift = document.getElementById("firstShift").value;
+            let secondShift = document.getElementById("secondShift");
+            secondShift.innerHTML = '<option value="" selected disabled>Selecciona un turno</option>';
+
+            let validShifts = [];
+            if (firstShift === "día") validShifts = ["día", "noche"];
+            else if (firstShift === "noche") validShifts = ["noche", "descanso"];
+            else validShifts = ["descanso", "día"];
+
+            for (let shift of validShifts) {
+                let option = document.createElement("option");
+                option.value = shift;
+                option.innerText = shift.charAt(0).toUpperCase() + shift.slice(1);
+                secondShift.appendChild(option);
+            }
+            secondShift.disabled = false;
+        }
+
+        function enableEndDate() {
+            document.getElementById("endDate").disabled = false;
+            document.getElementById("endDate").min = document.getElementById("startDate").value;
+        }
+        function enableFirstShift() { document.getElementById("firstShift").disabled = false; }
+
+
+        // --- LÓGICA DE TURNOS Y HORAS ---
+        const festivosColombia = [
+            "2025-01-01", "2025-01-06", "2025-03-24", "2025-04-17", "2025-04-18",
+            "2025-05-01", "2025-06-02", "2025-06-23", "2025-06-30", "2025-07-20",
+            "2025-08-07", "2025-08-18", "2025-10-13", "2025-11-03", "2025-11-17",
+            "2025-12-08", "2025-12-25",
+            "2026-01-01", "2026-01-12", "2026-03-23", "2026-04-02", "2026-04-03",
+            "2026-05-01", "2026-05-18", "2026-06-08", "2026-06-15", "2026-06-29",
+            "2026-07-20", "2026-08-07", "2026-08-17", "2026-10-12", "2026-11-02",
+            "2026-11-16", "2026-12-08", "2026-12-25"
+        ];
+
+        function isFestive(date) {
+            if (date.getUTCDay() === 0) return true; // Domingo
+            let dateStr = date.toISOString().slice(0, 10);
+            return festivosColombia.includes(dateStr);
+        }
+
+        function calculateHoursForShift(date, shift) {
+            let todayFestive = isFestive(date);
+            let tomorrow = new Date(date);
+            tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
+            let tomorrowFestive = isFestive(tomorrow);
+
+            let hours = { HN: 0, RNO: 0, HEDO: 0, RFD: 0, RFN: 0, HEDF: 0, HENO: 0, HENF: 0 };
+
+            if (shift === "día") {
+                if (!todayFestive) { hours.HN = 8; hours.HEDO = 4; } 
+                else { hours.RFD = 8; hours.HEDF = 4; }
+            } else if (shift === "noche") {
+                if (!todayFestive && !tomorrowFestive) {
+                    hours.HN = 1; hours.RNO = 7; hours.HENO = 4;
+                } else if (!todayFestive && tomorrowFestive) {
+                    hours.HN = 1; hours.RNO = 5; hours.RFN = 2; hours.HENF = 4;
+                } else if (todayFestive && !tomorrowFestive) {
+                    hours.RFD = 1; hours.RFN = 5; hours.RNO = 2; hours.HENO = 4;
+                } else if (todayFestive && tomorrowFestive) {
+                    hours.RFD = 1; hours.RFN = 7; hours.HENF = 4;
+                }
+            }
+            return hours;
+        }
+
+        function createShiftSequence(firstShift, secondShift, daysCount) {
+            let sequence = [firstShift, secondShift];
+            if (firstShift === secondShift) {
+                if (firstShift === "día") sequence.push("noche", "noche");
+                else if (firstShift === "noche") sequence.push("descanso", "descanso");
+                else sequence.push("día", "día");
+            } else {
+                sequence.push(secondShift);
+            }
+            while (sequence.length < daysCount) {
+                let last = sequence[sequence.length - 1];
+                let next = last === "día" ? "noche" : (last === "noche" ? "descanso" : "día");
+                sequence.push(next, next);
+            }
+            return sequence.slice(0, daysCount);
+        }
+
+        // Obtener la semana del año (ISO) para agrupar y validar las 60 horas
+        function getISOWeek(date) {
+            let d = new Date(date);
+            d.setUTCHours(0,0,0,0);
+            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+            let yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+            return Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+        }
+
+        let shiftGroups = new Map();
+        let weeklyHoursTracker = new Map();
+
+        function calculateSequence() {
+            let startDateStr = document.getElementById("startDate").value;
+            let endDateStr = document.getElementById("endDate").value;
+            let firstShift = document.getElementById("firstShift").value.toLowerCase();
+            let secondShift = document.getElementById("secondShift").value.toLowerCase();
+            let payPeriod = document.getElementById("payPeriod").value;
+
+            let startDate = new Date(startDateStr + "T00:00:00Z");
+            let endDate = new Date(endDateStr + "T00:00:00Z");
+
+            if (startDate > endDate) {
+                alert("La fecha de inicio debe ser anterior a la fecha de fin.");
+                return;
+            }
+
+            let daysCount = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+            let shiftSequence = createShiftSequence(firstShift, secondShift, daysCount);
+
+            shiftGroups.clear();
+            weeklyHoursTracker.clear();
+
+            let current_date = new Date(startDate);
+            let monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+            for (let shift of shiftSequence) {
+                let y = current_date.getUTCFullYear();
+                let m = current_date.getUTCMonth();
+                let d = current_date.getUTCDate();
+                
+                // RASTREO SEMANAL PARA LÍMITE DE 60 HORAS
+                let isoWeek = getISOWeek(current_date);
+                let weekYear = y;
+                if (m === 11 && isoWeek === 1) weekYear++;
+                if (m === 0 && isoWeek > 50) weekYear--;
+                let weekLabel = `Semana ${isoWeek} del ${weekYear}`;
+                
+                if(!weeklyHoursTracker.has(weekLabel)) weeklyHoursTracker.set(weekLabel, 0);
+
+                let key, label;
+                if (payPeriod === "quincenal") {
+                    let q = d <= 15 ? "Q1" : "Q2";
+                    key = `${y}-${m}-${q}`;
+                    let qText = d <= 15 ? "1ra Quincena (1 al 15)" : "2da Quincena (16 a fin de mes)";
+                    label = `${qText} de ${monthNames[m]} ${y}`;
+                } else {
+                    key = `${y}-${m}`;
+                    label = `Mes de ${monthNames[m]} ${y}`;
+                }
+
+                if (!shiftGroups.has(key)) {
+                    shiftGroups.set(key, {
+                        label: label,
+                        shifts: [],
+                        totals: { HN: 0, RNO: 0, HEDO: 0, RFD: 0, RFN: 0, HEDF: 0, HENO: 0, HENF: 0 },
+                        daysCount: 0
+                    });
+                }
+
+                let group = shiftGroups.get(key);
+                let hours = calculateHoursForShift(current_date, shift);
+                
+                group.shifts.push({ date: new Date(current_date), shift: shift, hours: hours });
+                group.daysCount++;
+                
+                let shiftTotalHours = 0;
+                Object.keys(hours).forEach(k => {
+                    group.totals[k] += hours[k];
+                    shiftTotalHours += hours[k];
+                });
+
+                weeklyHoursTracker.set(weekLabel, weeklyHoursTracker.get(weekLabel) + shiftTotalHours);
+                current_date.setUTCDate(current_date.getUTCDate() + 1);
+            }
+
+            displayResults();
+            displayPayroll();
+
+            document.getElementById("startDate").disabled = true;
+            document.getElementById("endDate").disabled = true;
+            document.getElementById("firstShift").disabled = true;
+            document.getElementById("secondShift").disabled = true;
+            document.getElementById("payPeriod").disabled = true;
+            document.getElementById("calculateButton").disabled = true;
+            document.getElementById("clearButton").disabled = false;
+        }
+
+        // --- RENDERIZADO DE TABLAS ---
+        const formatCOP = (num) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(Math.round(num));
+
+        function displayResults() {
+            let resultDiv = document.getElementById("result");
+            
+            let baseSalary = parseFloat(document.getElementById("cfgBase").value) || 1750905;
+            let divisor = parseFloat(document.getElementById("cfgDivisor").value) || 220;
+            let vho = baseSalary / divisor;
+
+            let exceededWeeks = [];
+            for (let [week, totalH] of weeklyHoursTracker) {
+                if (totalH > 60) exceededWeeks.push(`<strong>${week}:</strong> Trabajaste ${totalH} horas.`);
+            }
+
+            let complianceAlertHtml = '';
+            if (exceededWeeks.length > 0) {
+                complianceAlertHtml = `
+                    <div class="alert-danger" style="border-left: 5px solid var(--danger-color);">
+                        <strong><i class="fas fa-exclamation-triangle"></i> ¡ALERTA: Límite Legal Superado! (Circular 0040)</strong><br>
+                        Has superado el límite de <strong>60 horas laboradas a la semana</strong>:
+                        <ul style="margin-top: 8px; margin-left: 20px;">
+                            <li>${exceededWeeks.join('</li><li>')}</li>
+                        </ul>
+                    </div>
+                `;
+            } else {
+                complianceAlertHtml = `
+                    <div class="alert-success" style="border-left: 5px solid var(--success-color);">
+                        <strong><i class="fas fa-check-circle"></i> ¡Cumplimiento de Jornada Validado! (Circular 0040)</strong><br>
+                        El sistema auditó semana a semana. Ninguna superó el límite legal de <strong>60 horas</strong>.
+                    </div>
+                `;
+            }
+
+            resultDiv.innerHTML = complianceAlertHtml + `
+                <div class="legend">
+                    <h3><i class="fas fa-info-circle"></i> Valores de Hora (Reforma):</h3>
+                    <ul>
+                        <li><strong>HN:</strong> Hora Normal (8h) <br><strong style="color:var(--accent-color);">${formatCOP(vho)}</strong></li>
+                        <li><strong>RNO:</strong> Rec. Nocturno Ordinario (35%) <br><strong style="color:var(--accent-color);">${formatCOP(vho * 0.35)}</strong></li>
+                        <li><strong>HEDO:</strong> Extra Diurna Ordinaria (125%) <br><strong style="color:var(--accent-color);">${formatCOP(vho * 1.25)}</strong></li>
+                        <li><strong>RFD:</strong> Rec. Festivo Diurno <strong>(80%)</strong> <br><strong style="color:var(--accent-color);">${formatCOP(vho * 0.80)}</strong></li>
+                        <li><strong>RFN:</strong> Rec. Festivo Nocturno <strong>(115%)</strong> <br><strong style="color:var(--accent-color);">${formatCOP(vho * 1.15)}</strong></li>
+                        <li><strong>HEDF:</strong> Extra Diurna Festiva <strong>(205%)</strong> <br><strong style="color:var(--accent-color);">${formatCOP(vho * 2.05)}</strong></li>
+                        <li><strong>HENO:</strong> Extra Nocturna Ordinaria (175%) <br><strong style="color:var(--accent-color);">${formatCOP(vho * 1.75)}</strong></li>
+                        <li><strong>HENF:</strong> Extra Nocturna Festiva <strong>(255%)</strong> <br><strong style="color:var(--accent-color);">${formatCOP(vho * 2.55)}</strong></li>
+                    </ul>
+                </div>
+            `;
+
+            for (let [key, group] of shiftGroups) {
+                let div = document.createElement("div");
+                div.className = "table-responsive";
+                
+                let html = `<table>
+                    <caption>Cálculo de turnos: ${group.label}</caption>
+                    <thead>
+                        <tr><th>Fecha</th><th>Turno</th><th>HN</th><th>RNO</th><th>HEDO</th><th>RFD</th><th>RFN</th><th>HEDF</th><th>HENO</th><th>HENF</th></tr>
+                    </thead>
+                    <tbody>`;
+                
+                for (let s of group.shifts) {
+                    let dStr = s.date.toISOString().slice(0, 10);
+                    let fest = isFestive(s.date) ? `<strong>${dStr} (Festivo)</strong>` : dStr;
+                    let color = s.shift === "descanso" ? 'style="color:#95a5a6; font-weight:bold;"' : '';
+                    let h = s.hours;
+                    
+                    html += `<tr>
+                        <td>${fest}</td><td ${color}>${s.shift.toUpperCase()}</td>
+                        <td>${h.HN||"-"}</td><td>${h.RNO||"-"}</td><td>${h.HEDO||"-"}</td><td>${h.RFD||"-"}</td>
+                        <td>${h.RFN||"-"}</td><td>${h.HEDF||"-"}</td><td>${h.HENO||"-"}</td><td>${h.HENF||"-"}</td>
+                    </tr>`;
+                }
+                
+                let t = group.totals;
+                html += `</tbody><tfoot><tr><td colspan="2" style="text-align:right; text-transform:uppercase;">Total Periodo:</td>`;
+                Object.keys(t).forEach(k => html += `<td style="color:${t[k]>0?'var(--accent-color)':'inherit'}">${t[k]}</td>`);
+                html += `</tr></tfoot></table>`;
+                
+                div.innerHTML = html;
+                resultDiv.appendChild(div);
+            }
+        }
+
+        // --- LIQUIDACIÓN FINANCIERA AUTOMÁTICA Y AUDITORÍA ---
+        function auditPayments() {
+            let totalDebt = 0;
+            let auditActive = false;
+
+            document.querySelectorAll('.audit-input').forEach(input => {
+                if (input.id.startsWith('pagoEmpresa_')) {
+                    let key = input.dataset.key;
+                    let netoLey = parseFloat(input.dataset.neto);
+                    
+                    let descInput = document.getElementById(`otrosDesc_${key}`);
+                    let pagoInput = document.getElementById(`pagoEmpresa_${key}`);
+                    
+                    let otrosDescuentos = parseFloat(descInput.value) || 0;
+                    let pagadoPorEmpresa = parseFloat(pagoInput.value);
+                    
+                    let resDiv = document.getElementById(`auditResult_${key}`);
+
+                    if (!isNaN(pagadoPorEmpresa)) {
+                        auditActive = true;
+                        let netoEsperado = netoLey - otrosDescuentos;
+                        let diferencia = netoEsperado - pagadoPorEmpresa;
+                        totalDebt += diferencia;
+
+                        if (Math.abs(diferencia) <= 100) {
+                            resDiv.innerHTML = `<span style="color: var(--success-color);"><i class="fas fa-check-circle"></i> Cuadre Perfecto. Te pagaron correctamente.</span>`;
+                        } else if (diferencia > 100) {
+                            resDiv.innerHTML = `<span style="color: var(--danger-color);"><i class="fas fa-exclamation-circle"></i> Faltante: La empresa te debe <strong>${formatCOP(diferencia)}</strong></span>`;
+                        } else {
+                            resDiv.innerHTML = `<span style="color: var(--accent-color);"><i class="fas fa-info-circle"></i> Excedente: Te pagaron de más <strong>${formatCOP(Math.abs(diferencia))}</strong></span>`;
+                        }
+                    } else {
+                        resDiv.innerHTML = "";
+                    }
+                }
+            });
+
+            let consolBox = document.getElementById('consolidationBox');
+            if (auditActive) {
+                consolBox.style.display = 'block';
+                let amountDiv = document.getElementById('consolidationAmount');
+                
+                if (totalDebt > 100) {
+                    consolBox.style.backgroundColor = 'var(--danger-color)';
+                    document.getElementById('consolidationTitle').innerText = "Deuda Total de la Empresa a tu Favor";
+                    amountDiv.innerHTML = `${formatCOP(totalDebt)}`;
+                } else if (totalDebt < -100) {
+                    consolBox.style.backgroundColor = 'var(--accent-color)';
+                    document.getElementById('consolidationTitle').innerText = "Saldo a Favor de la Empresa (Te pagaron de más)";
+                    amountDiv.innerHTML = `${formatCOP(Math.abs(totalDebt))}`;
+                } else {
+                    consolBox.style.backgroundColor = 'var(--success-color)';
+                    document.getElementById('consolidationTitle').innerText = "Auditoría Perfecta";
+                    amountDiv.innerHTML = `<i class="fas fa-check"></i> Pagos Exactos`;
+                }
+            } else {
+                consolBox.style.display = 'none';
+            }
+        }
+
+        function displayPayroll() {
+            let container = document.getElementById("payroll-container");
+            container.innerHTML = "";
+            
+            let payPeriod = document.getElementById("payPeriod").value;
+            let gridDiv = document.createElement("div");
+            gridDiv.className = shiftGroups.size > 1 ? "payroll-grid multi-col" : "payroll-grid";
+
+            let baseSalary = parseFloat(document.getElementById("cfgBase").value) || 1750905;
+            let transport = parseFloat(document.getElementById("cfgTransport").value) || 249095;
+            let divisor = parseFloat(document.getElementById("cfgDivisor").value) || 220;
+            let pSalud = (parseFloat(document.getElementById("cfgSalud").value) || 4) / 100;
+            let pPension = (parseFloat(document.getElementById("cfgPension").value) || 4) / 100;
+
+            let vho = baseSalary / divisor;
+
+            for (let [key, group] of shiftGroups) {
+                let t = group.totals;
+                let actualDaysCount = group.daysCount;
+                
+                // --- LÓGICA DE MES COMERCIAL (CST) ---
+                let payDays = actualDaysCount; 
+                
+                let firstDate = group.shifts[0].date;
+                let lastDate = group.shifts[group.shifts.length - 1].date;
+                let d1 = firstDate.getUTCDate();
+                let d2 = lastDate.getUTCDate();
+                let m1 = firstDate.getUTCMonth();
+                let year = firstDate.getUTCFullYear();
+                let lastDayOfMonth = new Date(Date.UTC(year, m1 + 1, 0)).getUTCDate();
+
+                if (payPeriod === "mensual") {
+                    // Mes completo, se paga sobre 30 dias (mes comercial)
+                    if (d1 === 1 && d2 === lastDayOfMonth) payDays = 30;
+                } else if (payPeriod === "quincenal") {
+                    // Quincena 1 (del 1 al 15)
+                    if (d1 === 1 && d2 === 15) payDays = 15;
+                    // Quincena 2 (del 16 a fin de mes), siempre equivale a 15 dias en nomina
+                    else if (d1 === 16 && d2 === lastDayOfMonth) payDays = 15;
+                    // Si se seleccionó el mes entero en vista quincenal (Edge Case)
+                    else if (d1 === 1 && d2 === lastDayOfMonth) payDays = 30;
+                }
+                
+                // Tope comercial general (Ningún mes para base fija paga más de 30 días)
+                if (payDays > 30) payDays = 30;
+                
+                let proportion = payDays / 30;
+                let earnedBase = baseSalary * proportion;
+                let earnedTransport = transport * proportion;
+
+                // --- RECÁRGOS Y EXTRAS (ESTOS SÍ SUMAN EL DÍA 31) ---
+                let money_RNO = t.RNO * vho * 0.35;
+                let money_HEDO = t.HEDO * vho * 1.25;
+                let money_RFD = t.RFD * vho * 0.80;
+                let money_RFN = t.RFN * vho * 1.15;
+                let money_HEDF = t.HEDF * vho * 2.05;
+                let money_HENO = t.HENO * vho * 1.75;
+                let money_HENF = t.HENF * vho * 2.55;
+                
+                let totalRecargos = money_RNO + money_HEDO + money_RFD + money_RFN + money_HEDF + money_HENO + money_HENF;
+                
+                let totalDevengado = earnedBase + totalRecargos;
+                
+                let valSalud = totalDevengado * pSalud;
+                let valPension = totalDevengado * pPension;
+                let totalDeducciones = valSalud + valPension;
+                
+                let netoPagar = totalDevengado + earnedTransport - totalDeducciones;
+
+                let row = (label, qty, val) => val > 0 ? `<div class="payroll-row"><span>${label} <span class="badge">${qty} h</span></span><span>${formatCOP(val)}</span></div>` : '';
+
+                let idKey = key.replace(/-/g, '_');
+
+                let slipHTML = `
+                    <div class="payroll-slip">
+                        <div class="payroll-header">
+                            <div>
+                                <h2><i class="fas fa-file-invoice-dollar"></i> Desprendible</h2>
+                                <span style="font-size: 0.95rem; color: #555;">${group.label}</span>
+                            </div>
+                            <div style="text-align: right; color: #7f8c8d; font-size: 0.9rem;">
+                                Calendario: <strong>${actualDaysCount} días</strong><br>
+                                Base Pago CST: <strong>${payDays} días</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="payroll-row bold" style="align-items: center;">
+                            <span>Salario Base (Mes Comercial)<br>
+                                <span style="font-size: 0.85rem; font-weight: normal; color: #7f8c8d;">(${formatCOP(baseSalary)} / 30 días × ${payDays} días)</span>
+                            </span>
+                            <span>${formatCOP(earnedBase)}</span>
+                        </div>
+                        
+                        <div style="margin-top:1rem; color:var(--main-color); font-weight:bold; border-bottom: 1px solid #ddd; padding-bottom: 5px;">Detalle Extras y Recargos (Suman Día 31)</div>
+                        ${row('Recargo Noct. Ordinario (35%)', t.RNO, money_RNO)}
+                        ${row('Hora Extra Diurna Ordinaria (125%)', t.HEDO, money_HEDO)}
+                        ${row('Recargo Festivo Diurno (80%)', t.RFD, money_RFD)}
+                        ${row('Recargo Festivo Noct. (115%)', t.RFN, money_RFN)}
+                        ${row('Hora Extra Diurna Festiva (205%)', t.HEDF, money_HEDF)}
+                        ${row('Hora Extra Noct. Ordinaria (175%)', t.HENO, money_HENO)}
+                        ${row('Hora Extra Noct. Festiva (255%)', t.HENF, money_HENF)}
+                        
+                        <div class="payroll-row subtotal" style="background:#ecf0f1;"><span>Total Recargos y Extras</span><span>${formatCOP(totalRecargos)}</span></div>
+                        <div class="payroll-row subtotal" style="background:#e8f4f8; margin-top:0.5rem;"><span>Total Devengado (Base+Extras)</span><span>${formatCOP(totalDevengado)}</span></div>
+                        
+                        <div class="payroll-row" style="margin-top:1rem; align-items: center;">
+                            <span>Aux. Transporte (Mes Comercial)<br>
+                                <span style="font-size: 0.85rem; color: #7f8c8d;">(${formatCOP(transport)} / 30 días × ${payDays} días)</span>
+                            </span>
+                            <span>+ ${formatCOP(earnedTransport)}</span>
+                        </div>
+                        
+                        <div class="payroll-row discount" style="margin-top:1rem;"><span>Salud (${(pSalud*100).toFixed(1)}%)</span><span>- ${formatCOP(valSalud)}</span></div>
+                        <div class="payroll-row discount"><span>Pensión (${(pPension*100).toFixed(1)}%)</span><span>- ${formatCOP(valPension)}</span></div>
+                        
+                        <div class="payroll-total">
+                            <span>NETO DE LEY (A PAGAR)</span>
+                            <span>${formatCOP(netoPagar)}</span>
+                        </div>
+
+                        <div class="audit-box">
+                            <h4><i class="fas fa-balance-scale"></i> Auditoría de Pago Real</h4>
+                            <p style="font-size: 0.85rem; color: #555; margin-bottom: 1rem;">Para saber si te liquidaron bien, ingresa los descuentos y lo que te consignaron.</p>
+                            <div class="form-grid" style="gap: 1rem;">
+                                <div class="form-group">
+                                    <label style="font-size: 0.85rem;">Otros Descuentos (Ej. Libranzas):</label>
+                                    <input type="number" class="audit-input" id="otrosDesc_${idKey}" data-key="${idKey}" data-neto="${netoPagar}" placeholder="0" oninput="auditPayments()">
+                                </div>
+                                <div class="form-group">
+                                    <label style="font-size: 0.85rem;">Neto Pagado por la Empresa:</label>
+                                    <input type="number" class="audit-input" id="pagoEmpresa_${idKey}" data-key="${idKey}" data-neto="${netoPagar}" placeholder="0" oninput="auditPayments()">
+                                </div>
+                            </div>
+                            <div id="auditResult_${idKey}" style="margin-top: 1rem; font-weight: bold; text-align: center;"></div>
+                        </div>
+                    </div>
+                `;
+                
+                gridDiv.innerHTML += slipHTML;
+            }
+            
+            container.appendChild(gridDiv);
+
+            let consolHtml = `
+                <div id="consolidationBox" class="consolidation-box">
+                    <h2 id="consolidationTitle">Consolidado de Auditoría</h2>
+                    <div id="consolidationAmount" class="consolidation-amount">$0</div>
+                    <p style="font-size: 0.95rem; margin-top: 1rem;"><i class="fas fa-info-circle"></i> Este valor consolida la suma total de faltantes o excedentes de todas las nóminas analizadas arriba.</p>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', consolHtml);
+        }
+
+        function clearData() {
+            document.getElementById("shiftForm").reset();
+            document.getElementById("secondShift").innerHTML = '<option value="" selected disabled>Selecciona un turno</option>';
+            document.getElementById("secondShift").disabled = true;
+            document.getElementById("startDate").disabled = false;
+            document.getElementById("endDate").disabled = true;
+            document.getElementById("firstShift").disabled = true;
+            document.getElementById("payPeriod").disabled = false;
+            document.getElementById("calculateButton").disabled = true;
+            document.getElementById("clearButton").disabled = true;
+            document.getElementById("result").innerHTML = "";
+            document.getElementById("payroll-container").innerHTML = "";
+            shiftGroups.clear();
+            weeklyHoursTracker.clear();
+        }
+    </script>
 </body>
 </html>
