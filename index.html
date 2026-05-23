@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Secuencia de Turnos y Liquidación Ley 2026</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,600,700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -28,6 +28,10 @@
             padding: 0;
         }
 
+        html {
+            font-size: 16px;
+        }
+
         body {
             font-family: 'Roboto', sans-serif;
             background-color: var(--bg-color);
@@ -35,16 +39,26 @@
             line-height: 1.6;
         }
 
-        /* Navbar / Tabs */
+        /* Navbar / Tabs con scroll horizontal para móviles */
         nav {
             background-color: var(--main-color);
             display: flex;
             justify-content: center;
-            flex-wrap: wrap;
             position: sticky;
             top: 0;
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+        }
+
+        nav::-webkit-scrollbar {
+            height: 4px;
+        }
+        nav::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
         }
 
         nav button {
@@ -59,6 +73,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-shrink: 0; /* Evita que los botones se compriman */
         }
 
         nav button:hover, nav button.active {
@@ -111,10 +126,6 @@
             grid-column: 1 / -1;
         }
 
-        @media (max-width: 768px) {
-            .form-grid { grid-template-columns: 1fr; }
-        }
-
         .form-group {
             display: flex;
             flex-direction: column;
@@ -128,6 +139,7 @@
         }
 
         input, select {
+            width: 100%;
             font-size: 1.05rem;
             padding: 0.75rem;
             border: 1px solid var(--border-color);
@@ -136,6 +148,7 @@
             outline: none;
             transition: border-color 0.3s;
             font-family: inherit;
+            box-sizing: border-box;
         }
         
         input:focus, select:focus {
@@ -202,11 +215,13 @@
         }
 
         .table-responsive {
+            width: 100%;
             overflow-x: auto;
             border-radius: 8px;
             box-shadow: var(--box-shadow);
             margin-bottom: 2rem;
             background: white;
+            -webkit-overflow-scrolling: touch;
         }
 
         table {
@@ -222,6 +237,7 @@
             padding: 1rem;
             background-color: var(--main-color);
             color: white;
+            text-align: left;
         }
 
         thead th {
@@ -282,6 +298,12 @@
             margin: 0;
             font-size: 1.4rem;
             text-align: left;
+        }
+        
+        .payroll-header-info {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 0.9rem;
         }
 
         .payroll-row {
@@ -396,44 +418,59 @@
             justify-content: center;
         }
         
-        .alert-info {
-            background-color: #d1ecf1;
-            color: #0c5460;
+        .alert-info, .alert-warning, .alert-success, .alert-danger {
             padding: 1rem;
             border-radius: 5px;
             margin-bottom: 1.5rem;
-            border: 1px solid #bee5eb;
             font-size: 0.95rem;
         }
 
-        .alert-warning {
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 1rem;
-            border-radius: 5px;
-            margin-bottom: 1.5rem;
-            border: 1px solid #ffeeba;
-            font-size: 0.95rem;
-        }
+        .alert-info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .alert-warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 1rem;
-            border-radius: 5px;
-            margin-bottom: 1.5rem;
-            border: 1px solid #c3e6cb;
-            font-size: 0.95rem;
-        }
+        /* ==================== MEDIA QUERIES PARA CELULARES ==================== */
+        @media (max-width: 768px) {
+            html { font-size: 14.5px; } /* Ajuste tipográfico general para ganar espacio */
 
-        .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 1rem;
-            border-radius: 5px;
-            margin-bottom: 1.5rem;
-            border: 1px solid #f5c6cb;
-            font-size: 0.95rem;
+            nav { justify-content: flex-start; }
+            nav button { padding: 0.8rem 1rem; font-size: 0.95rem; }
+
+            .section-container { padding: 15px 10px; }
+            .card { padding: 1.2rem; }
+            
+            h1 { font-size: 1.7rem; line-height: 1.3; }
+            h2 { font-size: 1.3rem; }
+            
+            .form-grid { grid-template-columns: 1fr; gap: 1rem; }
+            
+            .btn-container { flex-direction: column; }
+            button.action-btn { width: 100%; padding: 1rem; font-size: 1.15rem; }
+
+            .payroll-slip { padding: 1.2rem; }
+            .payroll-header { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .payroll-header-info { text-align: left; }
+            
+            /* Ajuste de filas de nómina para evitar sobreposición en móviles */
+            .payroll-row:not(.subtotal) { 
+                flex-direction: column; 
+                align-items: flex-start !important; 
+                gap: 5px; 
+            }
+            .payroll-row:not(.subtotal) span:last-child {
+                align-self: flex-start;
+                font-size: 1.15rem;
+                font-weight: 700;
+                color: var(--accent-color);
+            }
+            .payroll-row.subtotal { flex-direction: row; justify-content: space-between; align-items: center !important; }
+            .payroll-row.subtotal span:last-child { font-size: 1.1rem; }
+
+            .payroll-total { flex-direction: column; text-align: center; gap: 10px; }
+            
+            .legend ul { grid-template-columns: 1fr; }
+            .badge { display: inline-block; margin-left: 0; margin-top: 5px; }
         }
     </style>
 </head>
@@ -988,7 +1025,7 @@
                                 <h2><i class="fas fa-file-invoice-dollar"></i> Desprendible</h2>
                                 <span style="font-size: 0.95rem; color: #555;">${group.label}</span>
                             </div>
-                            <div style="text-align: right; color: #7f8c8d; font-size: 0.9rem;">
+                            <div class="payroll-header-info">
                                 Calendario: <strong>${actualDaysCount} días</strong><br>
                                 Base Pago CST: <strong>${payDays} días</strong>
                             </div>
