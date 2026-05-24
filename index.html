@@ -6,8 +6,13 @@
     <title>Secuencia de Turnos y Liquidación Ley 2026</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,600,700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Librería html2pdf para exportar a PDF -->
+    
+    <!-- Librería html2pdf para el desprendible visual básico -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <!-- LIBRERÍAS SENIOR (NATIVAS) PARA EL DICTAMEN PERICIAL LEGAL -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
     
     <style>
         /* ==================== ESTILOS GENERALES ==================== */
@@ -373,30 +378,6 @@
             background: rgba(255,255,255,0.1);
         }
 
-        /* ==================== ESTILOS DOCUMENTO LEGAL (PDF) ==================== */
-        .legal-document {
-            font-family: 'Times New Roman', Times, serif;
-            color: black;
-            line-height: 1.6;
-            text-align: justify;
-            background: white;
-            padding: 40px;
-        }
-        .legal-document h3, .legal-document h4 { 
-            text-align: center; 
-            color: black; 
-            margin-bottom: 15px; 
-            font-weight: bold; 
-        }
-        .legal-document h4 { text-align: left; margin-top: 20px; font-size: 13pt; text-decoration: underline; }
-        .legal-document p { margin-bottom: 15px; font-size: 12pt; }
-        .legal-document table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10pt; page-break-inside: auto; }
-        .legal-document tr { page-break-inside: avoid; page-break-after: auto; }
-        .legal-document thead { display: table-header-group; }
-        .legal-document th, .legal-document td { border: 1px solid #000; padding: 5px; text-align: center; }
-        .legal-document th { background-color: #f0f0f0; font-weight: bold; }
-        .legal-document ul, .legal-document ol { margin-left: 40px; margin-bottom: 15px; font-size: 12pt; }
-
         /* ==================== ALERTAS Y MENSAJES ==================== */
         .alert-info, .alert-warning, .alert-success, .alert-danger {
             padding: 1rem;
@@ -409,71 +390,41 @@
         .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
         .alert-danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
-        /* ==================== MEDIA QUERIES PARA CELULARES ==================== */
+        /* ==================== MEDIA QUERIES ==================== */
         @media (max-width: 768px) {
             html { font-size: 14.5px; } 
-
             nav { justify-content: flex-start; }
             nav button { padding: 0.8rem 1rem; font-size: 0.95rem; }
-
             .section-container { padding: 15px 10px; }
             .card { padding: 1.2rem; }
-            
             h1 { font-size: 1.7rem; line-height: 1.3; }
             h2 { font-size: 1.3rem; }
-            
             .form-grid { grid-template-columns: 1fr; gap: 1rem; }
             .btn-container { flex-direction: column; }
             button.action-btn { width: 100%; padding: 1rem; font-size: 1.15rem; }
-
             #exportContainer { justify-content: center !important; }
-
             .payroll-slip { padding: 1.2rem; }
             .payroll-header { flex-direction: column; align-items: flex-start; gap: 5px; }
             .payroll-header-info { text-align: left; }
-            
-            .payroll-row:not(.subtotal) { 
-                flex-direction: column; 
-                align-items: flex-start !important; 
-                gap: 5px; 
-            }
-            .payroll-row:not(.subtotal) span:last-child {
-                align-self: flex-start;
-                font-size: 1.15rem;
-                font-weight: 700;
-                color: var(--accent-color);
-            }
+            .payroll-row:not(.subtotal) { flex-direction: column; align-items: flex-start !important; gap: 5px; }
+            .payroll-row:not(.subtotal) span:last-child { align-self: flex-start; font-size: 1.15rem; font-weight: 700; color: var(--accent-color); }
             .payroll-row.subtotal { flex-direction: row; justify-content: space-between; align-items: center !important; }
             .payroll-row.subtotal span:last-child { font-size: 1.1rem; }
-
             .payroll-total { flex-direction: column; text-align: center; gap: 10px; }
             .legend ul { grid-template-columns: 1fr; }
             .badge { display: inline-block; margin-left: 0; margin-top: 5px; }
         }
 
-        /* ==================== ESTILOS PARA IMPRESIÓN Y PDF NATIVO ==================== */
+        /* ==================== ESTILOS PARA IMPRESIÓN ==================== */
         @media print {
             body { background-color: white !important; color: black; }
             nav, #exportContainer, .card form, .alert-info, .alert-warning { display: none !important; }
             .section-container { padding: 0 !important; margin: 0 !important; display: block !important; }
             #config, #manual { display: none !important; }
-            
-            .card, .payroll-slip, .table-responsive, .legend, .audit-box, .consolidation-box {
-                box-shadow: none !important;
-                border: 1px solid #ccc !important;
-                page-break-inside: avoid;
-                break-inside: avoid;
-            }
-            .consolidation-box {
-                background-color: #f8f9fa !important;
-                color: #333 !important;
-            }
+            .card, .payroll-slip, .table-responsive, .legend, .audit-box, .consolidation-box { box-shadow: none !important; border: 1px solid #ccc !important; page-break-inside: avoid; break-inside: avoid; }
+            .consolidation-box { background-color: #f8f9fa !important; color: #333 !important; }
             .consolidation-box h2, .consolidation-amount { color: #333 !important; }
-            .payroll-total {
-                background-color: #eee !important;
-                color: black !important;
-                border: 2px solid #333;
-            }
+            .payroll-total { background-color: #eee !important; color: black !important; border: 2px solid #333; }
             button { display: none !important; }
         }
     </style>
@@ -540,32 +491,23 @@
             </form>
         </div>
         
-        <!-- Botones de Exportación (Invisibles hasta calcular) -->
+        <!-- Botones de Exportación -->
         <div id="exportContainer" style="display: none; justify-content: flex-end; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
-            <button class="action-btn" onclick="window.print()" style="display: flex; width: auto; padding: 0.6rem 1.2rem; font-size: 1rem; background-color: #7f8c8d; color: white;" title="Imprimir o Guardar como PDF del sistema">
+            <button class="action-btn" onclick="window.print()" style="display: flex; width: auto; padding: 0.6rem 1.2rem; font-size: 1rem; background-color: #7f8c8d; color: white;" title="Imprimir o Guardar visualmente">
                 <i class="fas fa-print"></i> Imprimir Reporte
             </button>
             <button id="exportPdfBtn" class="action-btn btn-success" onclick="exportToPDF()" style="display: flex; width: auto; padding: 0.6rem 1.2rem; font-size: 1rem;">
-                <i class="fas fa-file-pdf"></i> Descargar PDF Nómina
+                <i class="fas fa-file-pdf"></i> Descargar PDF Visual
             </button>
-            <button id="exportLegalBtn" class="action-btn btn-dark" onclick="exportLegalPDF()" style="display: none; width: auto; padding: 0.6rem 1.2rem; font-size: 1rem; border: 2px solid #e74c3c; animation: fadeIn 0.5s;">
-                <i class="fas fa-gavel"></i> Descargar Reclamación MinTrabajo
+            <button id="exportLegalBtn" class="action-btn btn-dark" onclick="exportNativeLegalPDF()" style="display: none; width: auto; padding: 0.6rem 1.2rem; font-size: 1rem; border: 2px solid #e74c3c; animation: fadeIn 0.5s;">
+                <i class="fas fa-balance-scale"></i> Descargar Informe Técnico Legal (PDF)
             </button>
         </div>
 
-        <!-- Contenedor que será exportado al PDF del REPORTE NORMAL -->
         <div id="report-content" style="background-color: var(--bg-color); padding: 5px; border-radius: 8px;">
-            <!-- Aquí se inyectan las tablas de turnos -->
             <div id="result"></div>
-            
-            <!-- Aquí se inyecta la nómina y la auditoría -->
             <div id="payroll-container"></div>
         </div>
-    </div>
-
-    <!-- CONTENEDOR OCULTO PARA LA CARTA LEGAL -->
-    <div id="legal-document-wrapper" style="display: none;">
-        <div id="legal-content" class="legal-document"></div>
     </div>
 
     <!-- 2. SECCIÓN: CONFIGURACIÓN SALARIAL Y DATOS LEGALES -->
@@ -573,9 +515,9 @@
         <h1><i class="fas fa-sliders-h"></i> Configuración y Datos Legales</h1>
         
         <div class="card">
-            <h2 style="text-align: left; font-size: 1.3rem;"><i class="fas fa-user-tie"></i> Datos para Informe Legal</h2>
+            <h2 style="text-align: left; font-size: 1.3rem;"><i class="fas fa-user-tie"></i> Datos para Informe Técnico Laboral</h2>
             <div class="alert-info">
-                <strong><i class="fas fa-info-circle"></i> Importante:</strong> Llene estos datos. Si la auditoría detecta que la empresa le debe dinero, el sistema redactará automáticamente una reclamación legal formal lista para presentar al Ministerio del Trabajo.
+                <strong><i class="fas fa-info-circle"></i> Importante:</strong> Llene estos datos. Si la auditoría detecta que la empresa le debe dinero, el sistema generará automáticamente un Informe Técnico de Parte en <strong>PDF nativo (alta calidad)</strong> fundamentado legal y operativamente.
             </div>
             <div class="form-grid">
                 <div class="form-group">
@@ -587,7 +529,7 @@
                     <input type="text" id="cfgCedula" placeholder="Ej. 1.000.000.000">
                 </div>
                 <div class="form-group">
-                    <label>Ciudad de Radicación (Para MinTrabajo):</label>
+                    <label>Ciudad de Radicación (Para Autoridades):</label>
                     <input type="text" id="cfgCiudad" placeholder="Ej. Bogotá D.C.">
                 </div>
                 <div class="form-group">
@@ -604,8 +546,8 @@
         <div class="card">
             <h2 style="text-align: left; font-size: 1.3rem;"><i class="fas fa-money-check-alt"></i> Configuración Salarial</h2>
             <div class="alert-info">
-                <strong><i class="fas fa-balance-scale"></i> Jurisprudencia Aplicada (Ley 1920 y Ley 2466 de 2025):</strong> 
-                Esta herramienta calcula tu salario base sobre el <strong>Mes Comercial (30 días)</strong> según el Código Sustantivo del Trabajo. Los recargos y extras se suman con exactitud para <strong>todos</strong> los días trabajados en tu secuencia.
+                <strong><i class="fas fa-balance-scale"></i> Jurisprudencia Aplicada (Regla del Mes Comercial y CST):</strong> 
+                Esta herramienta calcula tu salario base sobre el <strong>Mes Comercial (30 días)</strong> según el Código Sustantivo del Trabajo. Los recargos y extras se calculan sobre <strong>todos</strong> los turnos efectivamente laborados.
             </div>
 
             <div class="form-grid">
@@ -642,12 +584,12 @@
         
         <div class="card">
             <div class="alert-warning" style="background-color: #e8f4f8; border-color: #b8daff; color: #004085;">
-                <h2><i class="fas fa-gavel"></i> Marco Legal: Circular 0040, CST y Ley 2466</h2>
+                <h2><i class="fas fa-gavel"></i> Marco Legal: Circular 0040, CST y Mes Comercial</h2>
                 <ul style="margin-top: 10px; margin-left: 20px;">
                     <li><strong>Mes Comercial (Código Sustantivo del Trabajo):</strong> Todos los meses se liquidan en base a 30 días comerciales. La herramienta detecta automáticamente si seleccionas una quincena (1-15 o 16-fin) y asigna los 15 días comerciales de salario base correspondientes.</li>
                     <li><strong>¿Qué pasa con Febrero (28 o 29 días)?:</strong> Físicamente la segunda quincena de febrero tiene 13 o 14 días. Sin embargo, para efectos del <em>salario base y auxilio de transporte</em>, la herramienta te reconocerá <strong>15 días</strong>.</li>
-                    <li><strong>Pago Día 31 (Ley 1920 de 2018):</strong> Aunque el salario base se congela en 30 días, <em>todos los recargos y horas extras generados el día 31 SÍ son pagos</em>. La tabla de turnos rastrea cada día laborado y suma esos recargos.</li>
-                    <li><strong>Límite Semanal y Extras (Circular 0040):</strong> La herramienta no superará 8 horas ordinarias y un máximo de 4 horas extras por turno. Audita automáticamente para no sobrepasar las 60 horas semanales permitidas.</li>
+                    <li><strong>Liquidación del Día 31:</strong> El salario base se calcula sobre 30 días en cumplimiento del Mes Comercial. Sin embargo, todos los <em>recargos y horas extras</em> que se originen el día 31 son liquidados y sumados de forma independiente.</li>
+                    <li><strong>Límite Semanal y Extras (Circular 0040):</strong> La herramienta audita automáticamente los turnos de 12 horas (8 ordinarias y 4 extras), verificando que la secuencia no vulnere las 60 horas semanales dispuestas como límite legal.</li>
                     <li><strong>Generación Automática de Prueba Legal:</strong> Al usar la auditoría e ingresar el pago real, si hay deudas, el aplicativo te permite descargar un PDF firmado que sirve como prueba material ante el Ministerio del Trabajo.</li>
                 </ul>
             </div>
@@ -769,6 +711,7 @@
 
         let shiftGroups = new Map();
         let weeklyHoursTracker = new Map();
+        let auditState = { active: false, netoLeyGlobal: 0, pagadoGlobal: 0, deudaGlobal: 0 };
 
         function calculateSequence() {
             let startDateStr = document.getElementById("startDate").value;
@@ -857,7 +800,6 @@
             document.getElementById("exportContainer").style.display = 'flex';
         }
 
-        // --- RENDERIZADO DE TABLAS ---
         const formatCOP = (num) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
 
         function displayResults() {
@@ -951,108 +893,13 @@
             }
         }
 
-        // --- GENERADOR DE INFORME LEGAL ---
-        function generateLegalReport(totalNetoLey, totalPagado, globalDeuda) {
-            const btnLegal = document.getElementById('exportLegalBtn');
-            // Solo generar la carta si la empresa debe más de 100 pesos
-            if (globalDeuda <= 100) { 
-                btnLegal.style.display = 'none'; 
-                return; 
-            } 
 
-            btnLegal.style.display = 'flex'; 
-            let legalDiv = document.getElementById("legal-content");
-            
-            // Traer variables de configuración ingresadas por el usuario
-            let vNombre = document.getElementById("cfgName").value || "[NOMBRE DEL TRABAJADOR]";
-            let vCedula = document.getElementById("cfgCedula").value || "[NÚMERO DE CÉDULA]";
-            let vCiudad = document.getElementById("cfgCiudad").value || "[CIUDAD]";
-            let vEmpresa = document.getElementById("cfgEmpresa").value || "[NOMBRE DE LA EMPRESA]";
-            let vNit = document.getElementById("cfgNit").value || "[NIT DE LA EMPRESA]";
-            
-            let vBase = parseFloat(document.getElementById("cfgBase").value) || 1750905;
-            let vTransp = parseFloat(document.getElementById("cfgTransport").value) || 249095;
-            
-            // Detectar si el cálculo es quincenal o mensual para el texto de la carta
-            let tipoPeriodo = document.getElementById("payPeriod").value;
-            let textoPeriodoDesc = tipoPeriodo === "mensual" ? "los meses" : "las quincenas";
-
-            // Construir tablas de horas trabajadas para insertarlas en el documento legal
-            let tablasHtml = '';
-            for (let [key, group] of shiftGroups) {
-                tablasHtml += `<h4>PERIODO LÍQUIDADO: ${group.label}</h4><table><thead><tr><th>Fecha Física</th><th>Turno Real</th><th>HN</th><th>RNO</th><th>HEDO</th><th>RFD</th><th>RFN</th><th>HEDF</th><th>HENO</th><th>HENF</th></tr></thead><tbody>`;
-                for (let s of group.shifts) {
-                    let dStr = s.date.toISOString().slice(0, 10);
-                    let h = s.hours;
-                    tablasHtml += `<tr><td>${dStr} ${isFestive(s.date)?"(Festivo)":""}</td><td>${s.shift.toUpperCase()}</td><td>${h.HN||"-"}</td><td>${h.RNO||"-"}</td><td>${h.HEDO||"-"}</td><td>${h.RFD||"-"}</td><td>${h.RFN||"-"}</td><td>${h.HEDF||"-"}</td><td>${h.HENO||"-"}</td><td>${h.HENF||"-"}</td></tr>`;
-                }
-                let t = group.totals;
-                tablasHtml += `<tr><td colspan="2"><b>TOTAL PERIODO</b></td><td><b>${t.HN}</b></td><td><b>${t.RNO}</b></td><td><b>${t.HEDO}</b></td><td><b>${t.RFD}</b></td><td><b>${t.RFN}</b></td><td><b>${t.HEDF}</b></td><td><b>${t.HENO}</b></td><td><b>${t.HENF}</b></td></tr>`;
-                tablasHtml += `</tbody></table><br>`;
-            }
-
-            // Construcción del HTML de la carta legal (Estilo Word)
-            let html = `
-                <h3 style="text-align: center;">INFORME TÉCNICO Y RECLAMACIÓN LEGAL POR LIQUIDACIÓN DEFICITARIA DE NÓMINA</h3>
-                <br>
-                <p><strong>Señores:</strong><br>
-                <strong>MINISTERIO DEL TRABAJO</strong> - INSPECTOR DE TRABAJO EN TURNO<br>
-                <strong>Ciudad:</strong> ${vCiudad}</p>
-                <br>
-                <p><strong>Referencia:</strong> Reclamación laboral por reliquidación de nómina, pago deficitario de horas extras/recargos e incumplimiento de la Circular 0040.<br>
-                <strong>Accionante / Trabajador:</strong> ${vNombre} (C.C. ${vCedula})<br>
-                <strong>Empleador / Empresa:</strong> ${vEmpresa} (NIT: ${vNit})</p>
-                <br>
-                <p>Respetado Inspector(a),</p>
-                <p>Actuando en nombre propio, presento formal reclamación y <strong>Auditoría Técnica de Nómina</strong> fundamentada en los registros de turnos efectivamente laborados y los desprendibles de pago emitidos por mi empleador. Mediante el presente documento, demuestro de forma técnica y matemática el pago deficitario sistemático de recargos y horas extras correspondientes a <strong>${textoPeriodoDesc}</strong> detallados a continuación. Este actuar vulnera abiertamente la Ley 1920 de 2018, la Ley 2466 de 2025 y de manera específica, la <strong>Circular 0040 expedida por el Ministerio del Trabajo</strong>, la cual ratifica la obligación ineludible del empleador de llevar un registro detallado de las horas suplementarias y realizar su pago exacto sin vulnerar la jornada máxima.</p>
-                
-                <h4>1. FUNDAMENTOS TÉCNICOS DE LA AUDITORÍA</h4>
-                <ul>
-                    <li><strong>Salario Base Mensual:</strong> ${formatCOP(vBase)}</li>
-                    <li><strong>Auxilio de Transporte:</strong> ${formatCOP(vTransp)}</li>
-                    <li><strong>Regla del Mes Comercial (30 días):</strong> La base salarial se liquidó estrictamente bajo el mandato del Código Sustantivo del Trabajo.</li>
-                    <li><strong>Obligaciones - Circular 0040:</strong> Se contabilizó la totalidad del trabajo suplementario (incluido el día 31, avalado por la Ley 1920) entendiendo que la supresión del permiso previo dictada por el Ministerio <em>"no flexibiliza los límites legales, sino que transforma el papel del Ministerio a una inspección posterior"</em> donde el empleador está obligado a pagar y registrar cada hora extra generada.</li>
-                </ul>
-                <div style="page-break-before: always;"></div>
-                
-                <h4>2. TRAZABILIDAD DETALLADA DE TURNOS LABORADOS</h4>
-                <p>A continuación, se detalla la matriz pericial de los turnos físicos laborados por el accionante:</p>
-                ${tablasHtml}
-                
-                <h4>3. CONSOLIDADO FINANCIERO Y LIQUIDACIÓN DE LEY</h4>
-                <p>Habiendo realizado el cálculo de horas y recargos mostrados en la sección anterior, el valor total dictaminado que el empleador <strong>DEBIÓ</strong> reconocer por ley para los periodos analizados (Base Salarial + Suma de Extras/Recargos de todos los periodos - Deducciones Legales de Salud y Pensión) asciende a: <strong>${formatCOP(totalNetoLey)}</strong>.</p>
-                
-                <h4>4. ANÁLISIS DE AUDITORÍA Y FALTANTE A MI FAVOR</h4>
-                <p>Habiendo cruzado la liquidación de ley frente a los dineros consignados y/o desprendibles de la empresa, arroja el siguiente faltante patrimonial a mi favor:</p>
-                <ul>
-                    <li><strong>Total Neto de Ley (Según Auditoría Matemática):</strong> ${formatCOP(totalNetoLey)}</li>
-                    <li><strong>Total Real Consignado/Pagado por la Empresa:</strong> ${formatCOP(totalPagado)}</li>
-                </ul>
-                <p style="font-size: 14pt; background-color: #f0f0f0; padding: 15px; text-align: center; border: 1px solid black;"><strong>DIFERENCIA / FALTANTE A FAVOR DEL TRABAJADOR: ${formatCOP(globalDeuda)}</strong></p>
-
-                <h4>5. PRETENSIONES</h4>
-                <p>Por lo anteriormente expuesto y probado técnicamente, solicito al Ministerio del Trabajo ordenar a la empresa <strong>${vEmpresa}</strong>:</p>
-                <ol>
-                    <li><strong>EL PAGO INMEDIATO</strong> del faltante consolidado a mi favor por la suma de <strong>${formatCOP(globalDeuda)}</strong>, correspondiente a recargos y horas extras laboradas y no remuneradas.</li>
-                    <li><strong>LA RELIQUIDACIÓN</strong> de mis prestaciones sociales (prima, cesantías, intereses y vacaciones) y aportes a seguridad social, toda vez que al omitir el pago exacto de los recargos mencionados, la empresa disminuyó artificialmente mi Ingreso Base de Cotización (IBC).</li>
-                    <li><strong>SANCIONES Y VIGILANCIA:</strong> Iniciar el proceso de inspección y sanción a la empresa por la retención ilegal de salarios, el no registro o pago íntegro del tiempo suplementario, y por sobrepasar la jornada máxima semanal legal de 60 horas, de estricta observancia y control bajo las directrices de la <strong>Circular 0040 del Ministerio del Trabajo</strong>.</li>
-                </ol>
-                <br><br><br><br>
-                <p>Atentamente,</p>
-                <p>___________________________________________________<br>
-                <strong>${vNombre}</strong><br>
-                C.C. ${vCedula}<br>
-                Anexos: Desprendibles de pago y extractos bancarios que soportan los pagos recibidos.</p>
-            `;
-            legalDiv.innerHTML = html;
-        }
-
-        // --- AUDITORÍA DE PAGOS ---
+        // --- AUDITORÍA DE PAGOS Y ALMACENAMIENTO DE ESTADO GLOBAL ---
         function auditPayments() {
             let globalDeuda = 0;
             let globalNetoLey = 0;
             let globalPagado = 0;
-            let auditActive = false;
+            let isAuditActive = false;
 
             document.querySelectorAll('.audit-input').forEach(input => {
                 if (input.id.startsWith('pagoEmpresa_')) {
@@ -1068,16 +915,14 @@
                     let resDiv = document.getElementById(`auditResult_${key}`);
 
                     if (!isNaN(pagadoPorEmpresa)) {
-                        auditActive = true;
+                        isAuditActive = true;
                         let netoEsperado = netoLey - otrosDescuentos;
                         let diferencia = netoEsperado - pagadoPorEmpresa;
                         
-                        // Sumar totales globales
                         globalNetoLey += netoEsperado;
                         globalPagado += pagadoPorEmpresa;
                         globalDeuda += diferencia;
 
-                        // UI de resultados individuales
                         if (Math.abs(diferencia) <= 100) {
                             resDiv.innerHTML = `<span style="color: var(--success-color);"><i class="fas fa-check-circle"></i> Cuadre Perfecto. Te pagaron correctamente.</span>`;
                         } else if (diferencia > 100) {
@@ -1091,9 +936,18 @@
                 }
             });
 
-            // UI del resultado global
+            // Guardar en el estado global para uso de jsPDF
+            auditState = {
+                active: isAuditActive,
+                netoLeyGlobal: globalNetoLey,
+                pagadoGlobal: globalPagado,
+                deudaGlobal: globalDeuda
+            };
+
             let consolBox = document.getElementById('consolidationBox');
-            if (auditActive) {
+            let btnLegal = document.getElementById('exportLegalBtn');
+            
+            if (isAuditActive) {
                 consolBox.style.display = 'block';
                 let amountDiv = document.getElementById('consolidationAmount');
                 
@@ -1101,22 +955,21 @@
                     consolBox.style.backgroundColor = 'var(--danger-color)';
                     document.getElementById('consolidationTitle').innerText = "Deuda Total de la Empresa a tu Favor";
                     amountDiv.innerHTML = `${formatCOP(globalDeuda)}`;
+                    btnLegal.style.display = 'flex'; 
                 } else if (globalDeuda < -100) {
                     consolBox.style.backgroundColor = 'var(--accent-color)';
                     document.getElementById('consolidationTitle').innerText = "Saldo a Favor de la Empresa (Te pagaron de más)";
                     amountDiv.innerHTML = `${formatCOP(Math.abs(globalDeuda))}`;
+                    btnLegal.style.display = 'flex'; 
                 } else {
                     consolBox.style.backgroundColor = 'var(--success-color)';
                     document.getElementById('consolidationTitle').innerText = "Auditoría Perfecta";
                     amountDiv.innerHTML = `<i class="fas fa-check"></i> Pagos Exactos`;
+                    btnLegal.style.display = 'none'; 
                 }
-
-                // Generar reporte legal basado en los consolidados
-                generateLegalReport(globalNetoLey, globalPagado, globalDeuda);
-
             } else {
                 consolBox.style.display = 'none';
-                document.getElementById('exportLegalBtn').style.display = 'none';
+                btnLegal.style.display = 'none';
             }
         }
 
@@ -1159,7 +1012,7 @@
                         if (isFebruary) {
                             monthNotice = `<div style="background-color: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 4px; margin-top: 15px; font-size: 0.9rem; border: 1px solid #bee5eb;"><i class="fas fa-info-circle"></i> <strong>Ajuste de Febrero (Mes Comercial):</strong> Físicamente el mes tiene ${lastDayOfMonth} días, pero por ley laboral la base salarial se te asegura y liquida sobre <strong>30 días</strong>.</div>`;
                         } else if (lastDayOfMonth === 31) {
-                            monthNotice = `<div style="background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 4px; margin-top: 15px; font-size: 0.9rem; border: 1px solid #ffeeba;"><i class="fas fa-info-circle"></i> <strong>Ajuste Día 31 (Mes Comercial):</strong> El salario base se congela en 30 días. ¡Tranquilo! Los recargos y extras que generaste el día 31 <strong>SÍ</strong> están incluidos abajo en el detalle.</div>`;
+                            monthNotice = `<div style="background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 4px; margin-top: 15px; font-size: 0.9rem; border: 1px solid #ffeeba;"><i class="fas fa-info-circle"></i> <strong>Ajuste Día 31 (Mes Comercial):</strong> El salario base se liquida sobre 30 días. Sin embargo, los recargos y horas extras que generaste el día 31 <strong>SÍ</strong> están incluidos abajo en el detalle.</div>`;
                         }
                     }
                 } else if (payPeriod === "quincenal") {
@@ -1307,13 +1160,12 @@
             document.getElementById("result").innerHTML = "";
             document.getElementById("payroll-container").innerHTML = "";
             document.getElementById("exportContainer").style.display = 'none';
-            document.getElementById("exportLegalBtn").style.display = 'none';
-            document.getElementById("legal-content").innerHTML = '';
             shiftGroups.clear();
             weeklyHoursTracker.clear();
+            auditState = { active: false, netoLeyGlobal: 0, pagadoGlobal: 0, deudaGlobal: 0 };
         }
 
-        // --- FUNCIÓN PARA EXPORTAR EL REPORTE DE NÓMINA A PDF ---
+        // --- EXPORTAR VISUAL BÁSICO A PDF (html2pdf) ---
         function exportToPDF() {
             const btn = document.getElementById("exportPdfBtn");
             const originalText = btn.innerHTML;
@@ -1343,38 +1195,513 @@
             });
         }
 
-        // --- FUNCIÓN PARA EXPORTAR LA CERTIFICACIÓN LEGAL A PDF ---
-        function exportLegalPDF() {
+        // =====================================================================================
+        // --- GENERADOR SENIOR DE DOCUMENTO LEGAL (PDF NATIVO POR VECTORES con jsPDF) ---
+        // =====================================================================================
+        function exportNativeLegalPDF() {
+            if (!window.jspdf || !window.jspdf.jsPDF) {
+                alert("La librería de PDF no se ha cargado correctamente. Comprueba tu conexión a internet.");
+                return;
+            }
+
             const btn = document.getElementById("exportLegalBtn");
             const originalText = btn.innerHTML;
-            
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando Documento...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Trazando Documento...';
             btn.disabled = true;
-            
-            const element = document.getElementById('legal-document-wrapper');
-            // Lo mostramos temporalmente para que html2pdf lo pueda capturar correctamente
-            element.style.display = 'block'; 
-            
-            const opt = {
-                margin:       [25, 25, 25, 25], // Márgenes tipo carta formal (Word)
-                filename:     'Reclamacion_Legal_MinTrabajo.pdf',
-                image:        { type: 'jpeg', quality: 1 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' },
-                pagebreak:    { mode: ['css', 'legacy'] }
-            };
 
-            html2pdf().set(opt).from(element).save().then(() => {
-                element.style.display = 'none'; // Volver a ocultar el contenedor
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }).catch(err => {
-                console.error("Error al exportar documento legal:", err);
-                element.style.display = 'none';
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                alert("Hubo un error al generar la Reclamación Legal.");
-            });
+            setTimeout(() => {
+                try {
+                    const { jsPDF } = window.jspdf;
+                    // Documento tamaño Carta (Letter) en puntos (pt) para mayor precisión
+                    const doc = new jsPDF({ orientation: 'p', unit: 'pt', format: 'letter' });
+                    
+                    const margin = 40;
+                    const pageWidth = doc.internal.pageSize.getWidth();
+                    const textWidth = pageWidth - margin * 2;
+                    let cursorY = 50;
+
+                    // Función auxiliar para dibujar texto y controlar saltos de página
+                    function drawText(text, fontSize = 10, isBold = false, align = 'left', customSpacing = 1.2, textColor = [0,0,0]) {
+                        doc.setFont("helvetica", isBold ? "bold" : "normal");
+                        doc.setFontSize(fontSize);
+                        doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+                        
+                        let lines = doc.splitTextToSize(text, textWidth);
+                        let blockHeight = lines.length * (fontSize * customSpacing);
+                        
+                        // Salto de página si el bloque no cabe
+                        if (cursorY + blockHeight > doc.internal.pageSize.getHeight() - margin) {
+                            doc.addPage();
+                            cursorY = 50;
+                        }
+                        
+                        if (align === 'center') {
+                            lines.forEach(line => {
+                                let w = doc.getTextWidth(line);
+                                doc.text(line, (pageWidth - w) / 2, cursorY);
+                                cursorY += (fontSize * customSpacing);
+                            });
+                        } else {
+                            doc.text(lines, margin, cursorY);
+                            cursorY += blockHeight;
+                        }
+                        doc.setTextColor(0, 0, 0); // reset
+                    }
+
+                    // --- 1. Variables Globales ---
+                    let vNombre = document.getElementById("cfgName").value || "[NOMBRE DEL TRABAJADOR]";
+                    let vCedula = document.getElementById("cfgCedula").value || "[NÚMERO DE CÉDULA]";
+                    let vCiudad = document.getElementById("cfgCiudad").value || "Bogotá D.C.";
+                    let vEmpresa = document.getElementById("cfgEmpresa").value || "[NOMBRE DE LA EMPRESA]";
+                    let vNit = document.getElementById("cfgNit").value || "[NIT DE LA EMPRESA]";
+                    
+                    let vBase = parseFloat(document.getElementById("cfgBase").value) || 1750905;
+                    let vTransp = parseFloat(document.getElementById("cfgTransport").value) || 249095;
+                    let divisor = parseFloat(document.getElementById("cfgDivisor").value) || 220;
+                    let pSalud = (parseFloat(document.getElementById("cfgSalud").value) || 4) / 100;
+                    let pPension = (parseFloat(document.getElementById("cfgPension").value) || 4) / 100;
+                    
+                    let vho = vBase / divisor;
+                    let rate_HN = Math.round(vho);
+                    let rate_RNO = Math.round(vho * 0.35);
+                    let rate_HEDO = Math.round(vho * 1.25);
+                    let rate_RFD = Math.round(vho * 0.80);
+                    let rate_RFN = Math.round(vho * 1.15);
+                    let rate_HEDF = Math.round(vho * 2.05);
+                    let rate_HENO = Math.round(vho * 1.75);
+                    let rate_HENF = Math.round(vho * 2.55);
+
+                    let globalDeuda = auditState.deudaGlobal;
+                    let fechaEmision = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' });
+                    let tituloDoc = globalDeuda > 0 ? "RECLAMACIÓN POR DIFERENCIAS SALARIALES" : "CONSTANCIA TÉCNICA DE NÓMINA";
+
+                    // --- 2. Encabezado Oficial ---
+                    drawText(`INFORME TÉCNICO DE AUDITORÍA LABORAL Y ${tituloDoc}`, 14, true, 'center');
+                    drawText("Documento elaborado como Análisis Técnico de Parte", 10, false, 'center', 1.2, [100, 100, 100]);
+                    
+                    // Línea separadora
+                    cursorY += 5;
+                    doc.setLineWidth(1);
+                    doc.line(margin, cursorY, pageWidth - margin, cursorY);
+                    cursorY += 2;
+                    doc.line(margin, cursorY, pageWidth - margin, cursorY);
+                    cursorY += 20;
+
+                    // --- 3. Datos Legales ---
+                    drawText(`Fecha de emisión: ${fechaEmision}\nCiudad: ${vCiudad}`, 10, false);
+                    cursorY += 10;
+                    drawText("Señores:\nMINISTERIO DEL TRABAJO / INSPECTOR DE TRABAJO EN TURNO\nJUEZ LABORAL DEL CIRCUITO (En caso de demanda formal)\nEMPLEADOR ACCIONADO", 10, true);
+                    cursorY += 15;
+
+                    doc.autoTable({
+                        startY: cursorY,
+                        margin: { left: margin, right: margin },
+                        theme: 'plain',
+                        styles: { fontSize: 9, cellPadding: 2 },
+                        columnStyles: { 0: { fontStyle: 'bold', cellWidth: 150 } },
+                        body: [
+                            ['ACCIONANTE / TRABAJADOR:', `${vNombre} (C.C. ${vCedula})`],
+                            ['ACCIONADO / EMPLEADOR:', `${vEmpresa} (NIT: ${vNit})`],
+                            ['OBJETO DEL INFORME:', 'Auditoría financiera y operativa de nómina por presunto incumplimiento en el reconocimiento del trabajo suplementario, recargos y vulneración de límites de jornada.']
+                        ]
+                    });
+                    cursorY = doc.lastAutoTable.finalY + 15;
+
+                    drawText("Respetado(s) Señor(es),", 10, false);
+                    cursorY += 5;
+                    drawText("Actuando en nombre propio, presento formal RECLAMACIÓN y el siguiente INFORME TÉCNICO DE AUDITORÍA LABORAL elaborado como prueba de parte. Este documento analiza la trazabilidad cronológica de los turnos físicos efectivamente laborados frente a los pagos nominales reportados por la empresa accionada, demostrando la generación de trabajo suplementario no remunerado o remunerado de forma deficitaria.", 10, false);
+                    cursorY += 20;
+
+                    // --- 4. METODOLOGÍA Y JORNADA ---
+                    drawText("CAPÍTULO I: METODOLOGÍA, JORNADA BASE Y TRAZABILIDAD", 11, true);
+                    cursorY += 5;
+                    
+                    let metodologiaTexto = 
+                        "1. METODOLOGÍA APLICADA:\n" +
+                        "La presente auditoría se fundamenta en los siguientes pasos técnicos:\n" +
+                        "  a) Reconstrucción cronológica de turnos en base a registros físicos y operativos.\n" +
+                        "  b) Clasificación de horas (diurnas, nocturnas, extras y festivas) según franjas legales del CST.\n" +
+                        "  c) Liquidación matemática aplicando el Divisor de Horas mensual (VHO).\n" +
+                        "  d) Conciliación financiera cruzando el 'Neto de Ley Generado' vs. 'Neto Pagado' en extractos.\n\n" +
+                        "2. JORNADA BASE CONTRACTUAL Y HORARIOS EXACTOS:\n" +
+                        "El trabajador ejecutaba turnos rotativos bajo una secuencia operativa predefinida 2x2x2 (consistente en laborar 2 turnos de día, seguidos de 2 turnos de noche, seguidos de 2 días completos de descanso continuo). La materialización de dicho esquema implicó la ejecución de las siguientes franjas:\n" +
+                        "  • TURNO DÍA: Comprendido ininterrumpidamente de 06:00 a.m. a 06:00 p.m. (12 horas).\n" +
+                        "  • TURNO NOCHE: Comprendido ininterrumpidamente de 06:00 p.m. a 06:00 a.m. del día siguiente (12 horas).\n" +
+                        "Dichas franjas operativas desbordan la jornada ordinaria máxima legal vigente (Ley 2101 de 2021 y Circular 0040), configurando de pleno derecho la existencia de trabajo suplementario.\n\n" +
+                        "3. CRITERIO DE FRACCIONAMIENTO DEL TURNO Y RECARGOS:\n" +
+                        "Para determinar los recargos, el turno se divide estrictamente según los topes legales. A modo de ejemplo, en un turno nocturno de 12 horas (06:00 p.m. a 06:00 a.m.): la primera hora (6 p.m. a 7 p.m.) se liquida como diurna ordinaria (HN). De 7:00 p.m. a 06:00 a.m. se liquida con recargo nocturno. Una vez transcurridas las primeras 8 horas del turno (jornada máxima diaria legal), las 4 horas restantes se catalogan imperativamente como horas extras (HENO o HENF), priorizando el trabajo suplementario en la franja final del turno.\n\n" +
+                        "4. ORIGEN DE LA TRAZABILIDAD:\n" +
+                        "Las matrices expuestas más adelante corresponden a la consolidación de pruebas documentales operativas (minutas de guardia, reportes biométricos, cuadros de programación y comunicaciones) que reposan en poder del trabajador.";
+                    
+                    drawText(metodologiaTexto, 9.5, false);
+                    cursorY += 15;
+
+                    // --- 5. FUNDAMENTO NORMATIVO ---
+                    drawText("CAPÍTULO II: FUNDAMENTO NORMATIVO Y JURISPRUDENCIAL", 11, true);
+                    cursorY += 5;
+                    
+                    let normativoTexto = 
+                        "El cálculo de horas y valores de este informe técnico se ampara bajo las siguientes disposiciones:\n" +
+                        "• Arts. 159, 161 y 168 del Código Sustantivo del Trabajo (CST): Definen el trabajo suplementario, los límites máximos y los recargos obligatorios por nocturnidad (35%) y extras (25% o 75%).\n" +
+                        "• Art. 179 del CST: Regula el recargo por trabajo en días dominicales y festivos.\n" +
+                        "• Ley 2101 de 2021: Reducción gradual de la jornada máxima laboral semanal.\n" +
+                        "• Circular 0040 del Ministerio del Trabajo: Prohibición de superar las horas extras legales máximas permitidas (2 diarias / 12 semanales), configurando sanción administrativa su inobservancia.\n" +
+                        "• Regla del Mes Comercial (CST): Liquidación de salario base sobre 30 días, garantizando el pago de recargos y horas extras de forma independiente por cada turno laborado.";
+                    
+                    drawText(normativoTexto, 9.5, false);
+                    cursorY += 20;
+
+                    // --- 6. Tablas Base ---
+                    drawText("CAPÍTULO III: PARÁMETROS SALARIALES Y TARIFAS DE LEY", 11, true);
+                    cursorY += 5;
+                    doc.autoTable({
+                        startY: cursorY,
+                        margin: { left: margin, right: margin },
+                        theme: 'grid',
+                        headStyles: { fillColor: [226, 232, 240], textColor: [0,0,0], fontStyle: 'bold' },
+                        styles: { fontSize: 8.5, halign: 'center' },
+                        head: [['Salario Base Mensual', 'Auxilio de Transporte', 'Divisor Mensual', 'VHO (Hora Ordinaria)']],
+                        body: [[formatCOP(vBase), formatCOP(vTransp), `${divisor} Horas`, formatCOP(vho)]]
+                    });
+                    
+                    cursorY = doc.lastAutoTable.finalY + 5;
+                    drawText("Nota Técnica: El divisor mensual de 220 horas se fundamenta en la Ley 2101 de 2021 (jornada máxima legal de 44 horas semanales para el año 2026). La fórmula de conversión aplicada es: (44 horas / 6 días hábiles) × 30 días comerciales = 220 horas.", 8, false, 'left', 1.2, [100,100,100]);
+                    cursorY += 15;
+
+                    doc.autoTable({
+                        startY: cursorY,
+                        margin: { left: margin, right: margin },
+                        theme: 'grid',
+                        headStyles: { fillColor: [226, 232, 240], textColor: [0,0,0], fontStyle: 'bold' },
+                        styles: { fontSize: 8.5 },
+                        columnStyles: { 0: { halign: 'left' }, 1: { halign: 'center' }, 2: { halign: 'center', fontStyle: 'bold' } },
+                        head: [['Concepto de Trabajo Suplementario', 'Porcentaje Legal', 'Valor Unitario (COP)']],
+                        body: [
+                            ['Hora Ordinaria (HN)', '100%', formatCOP(rate_HN)],
+                            ['Recargo Nocturno Ordinario (RNO)', '35%', formatCOP(rate_RNO)],
+                            ['Hora Extra Diurna Ordinaria (HEDO)', '125%', formatCOP(rate_HEDO)],
+                            ['Recargo Festivo Diurno (RFD)', '80% / 100%', formatCOP(rate_RFD)],
+                            ['Recargo Festivo Nocturno (RFN)', '115%', formatCOP(rate_RFN)],
+                            ['Hora Extra Diurna Festiva (HEDF)', '205%', formatCOP(rate_HEDF)],
+                            ['Hora Extra Nocturna Ordinaria (HENO)', '175%', formatCOP(rate_HENO)],
+                            ['Hora Extra Nocturna Festiva (HENF)', '255%', formatCOP(rate_HENF)]
+                        ]
+                    });
+                    
+                    // Nueva página para las liquidaciones
+                    doc.addPage();
+                    cursorY = 50;
+                    drawText("CAPÍTULO IV: MATRICES DE LIQUIDACIÓN FINANCIERA POR PERIODO", 12, true);
+                    cursorY += 5;
+                    drawText("Evidencia matemática de la trazabilidad diaria (horario físico reportado) vs liquidación económica legal.", 9.5, false, 'left', 1.2, [80,80,80]);
+                    cursorY += 15;
+
+                    let contadorPeriodo = 1;
+                    let payPeriod = document.getElementById("payPeriod").value;
+
+                    // Acumuladores Globales para la Tabla Final Consolidada
+                    let globalTotals = {
+                        payDays: 0,
+                        base: 0,
+                        transport: 0,
+                        HN: 0, RNO: 0, HEDO: 0, RFD: 0, RFN: 0, HEDF: 0, HENO: 0, HENF: 0,
+                        m_RNO: 0, m_HEDO: 0, m_RFD: 0, m_RFN: 0, m_HEDF: 0, m_HENO: 0, m_HENF: 0,
+                        devengado: 0,
+                        salud: 0,
+                        pension: 0,
+                        otrasDeducciones: 0,
+                        netoLey: 0
+                    };
+
+                    // --- 7. Bucle Principal por cada periodo evaluado ---
+                    for (let [key, group] of shiftGroups) {
+                        let t = group.totals;
+                        let payDays = group.daysCount;
+                        let firstDate = group.shifts[0].date;
+                        let lastDate = group.shifts[group.shifts.length - 1].date;
+                        let d1 = firstDate.getUTCDate(), d2 = lastDate.getUTCDate();
+                        let m1 = firstDate.getUTCMonth(), year = firstDate.getUTCFullYear();
+                        let lastDayOfMonth = new Date(Date.UTC(year, m1 + 1, 0)).getUTCDate();
+
+                        if (payPeriod === "mensual" && d1 === 1 && d2 === lastDayOfMonth) payDays = 30;
+                        if (payPeriod === "quincenal") {
+                            if (d1 === 1 && d2 === 15) payDays = 15;
+                            else if (d1 === 16 && d2 === lastDayOfMonth) payDays = 15;
+                            else if (d1 === 1 && d2 === lastDayOfMonth) payDays = 30;
+                        }
+                        if (payDays > 30) payDays = 30;
+                        
+                        let proportion = payDays / 30;
+                        let earnedBase = Math.round(vBase * proportion);
+                        let earnedTransport = Math.round(vTransp * proportion);
+
+                        let m_RNO = Math.round(t.RNO * rate_RNO), m_HEDO = Math.round(t.HEDO * rate_HEDO), m_RFD = Math.round(t.RFD * rate_RFD);
+                        let m_RFN = Math.round(t.RFN * rate_RFN), m_HEDF = Math.round(t.HEDF * rate_HEDF), m_HENO = Math.round(t.HENO * rate_HENO), m_HENF = Math.round(t.HENF * rate_HENF);
+                        
+                        let totalRecargos = m_RNO + m_HEDO + m_RFD + m_RFN + m_HEDF + m_HENO + m_HENF;
+                        let devengado = earnedBase + totalRecargos;
+                        let valSalud = Math.round(devengado * pSalud), valPension = Math.round(devengado * pPension);
+                        let netoPagar = devengado + earnedTransport - (valSalud + valPension);
+
+                        let idKey = key.replace(/-/g, '_');
+                        let inputPago = document.getElementById(`pagoEmpresa_${idKey}`);
+                        let inputDesc = document.getElementById(`otrosDesc_${idKey}`);
+                        let pagadoReal = inputPago && inputPago.value ? parseFloat(inputPago.value) : 0;
+                        let descAdic = inputDesc && inputDesc.value ? parseFloat(inputDesc.value) : 0;
+                        let netoEsperadoReal = netoPagar - descAdic;
+                        let difPeriodo = netoEsperadoReal - pagadoReal;
+
+                        // --- Acumulando para la Tabla Final Consolidada ---
+                        globalTotals.payDays += payDays;
+                        globalTotals.base += earnedBase;
+                        globalTotals.transport += earnedTransport;
+                        
+                        globalTotals.HN += t.HN;
+                        globalTotals.RNO += t.RNO;
+                        globalTotals.HEDO += t.HEDO;
+                        globalTotals.RFD += t.RFD;
+                        globalTotals.RFN += t.RFN;
+                        globalTotals.HEDF += t.HEDF;
+                        globalTotals.HENO += t.HENO;
+                        globalTotals.HENF += t.HENF;
+
+                        globalTotals.m_RNO += m_RNO;
+                        globalTotals.m_HEDO += m_HEDO;
+                        globalTotals.m_RFD += m_RFD;
+                        globalTotals.m_RFN += m_RFN;
+                        globalTotals.m_HEDF += m_HEDF;
+                        globalTotals.m_HENO += m_HENO;
+                        globalTotals.m_HENF += m_HENF;
+
+                        globalTotals.devengado += devengado;
+                        globalTotals.salud += valSalud;
+                        globalTotals.pension += valPension;
+                        globalTotals.otrasDeducciones += descAdic;
+                        globalTotals.netoLey += netoEsperadoReal;
+                        // ---------------------------------------------------
+
+                        // Cabecera del Periodo
+                        if (cursorY > doc.internal.pageSize.getHeight() - 150) { doc.addPage(); cursorY = 50; }
+                        
+                        drawText(`PERIODO ${contadorPeriodo}: ${group.label.toUpperCase()}`, 11, true);
+                        cursorY += 5;
+                        drawText("A. Trazabilidad Operativa (Matriz de Turnos Reales 12h)", 9, true);
+                        cursorY += 2;
+                        drawText("Fuente de datos extraídos: Copia de Minuta de Guardia (Anexo A) y Programación de Turnos (Anexo B).", 8, false, 'left', 1.2, [100,100,100]);
+                        cursorY += 2;
+
+                        let turnosBody = group.shifts.map(s => [
+                            `${s.date.toISOString().slice(0, 10)}${isFestive(s.date) ? " (F)" : ""}`,
+                            s.shift.toUpperCase(),
+                            s.hours.HN||"0", s.hours.RNO||"0", s.hours.HEDO||"0", s.hours.RFD||"0", s.hours.RFN||"0", s.hours.HEDF||"0", s.hours.HENO||"0", s.hours.HENF||"0"
+                        ]);
+                        turnosBody.push([{ content: 'TOTAL HORAS:', colSpan: 2, styles: { halign: 'right', fontStyle: 'bold', fillColor: [219, 234, 254] } }, 
+                            { content: t.HN, styles:{fontStyle: 'bold', fillColor: [219, 234, 254]}}, { content: t.RNO, styles:{fontStyle: 'bold', fillColor: [219, 234, 254]}}, { content: t.HEDO, styles:{fontStyle: 'bold', fillColor: [219, 234, 254]}}, { content: t.RFD, styles:{fontStyle: 'bold', fillColor: [219, 234, 254]}}, { content: t.RFN, styles:{fontStyle: 'bold', fillColor: [219, 234, 254]}}, { content: t.HEDF, styles:{fontStyle: 'bold', fillColor: [219, 234, 254]}}, { content: t.HENO, styles:{fontStyle: 'bold', fillColor: [219, 234, 254]}}, { content: t.HENF, styles:{fontStyle: 'bold', fillColor: [219, 234, 254]}} 
+                        ]);
+
+                        doc.autoTable({
+                            startY: cursorY,
+                            margin: { left: margin, right: margin },
+                            theme: 'grid',
+                            headStyles: { fillColor: [241, 245, 249], textColor: [0,0,0], fontStyle: 'bold' },
+                            styles: { fontSize: 7.5, halign: 'center', cellPadding: 2 },
+                            head: [['Fecha', 'Turno (12h)', 'HN', 'RNO', 'HEDO', 'RFD', 'RFN', 'HEDF', 'HENO', 'HENF']],
+                            body: turnosBody
+                        });
+                        
+                        cursorY = doc.lastAutoTable.finalY + 10;
+                        drawText("B. Liquidación Matemática y Financiera de Ley", 9, true);
+                        cursorY += 2;
+
+                        let finBody = [];
+                        finBody.push([{ content: `Salario Base (Proporcional a ${payDays} días CST)`, styles: { halign: 'left', fontStyle: 'bold' } }, '-', '-', { content: formatCOP(earnedBase), styles: { fontStyle: 'bold', halign: 'right' } }]);
+                        if(t.RNO > 0) finBody.push(['Recargo Nocturno Ordinario (35%)', t.RNO, formatCOP(rate_RNO), { content: formatCOP(m_RNO), styles: { halign: 'right' } }]);
+                        if(t.HEDO > 0) finBody.push(['Hora Extra Diurna Ordinaria (125%)', t.HEDO, formatCOP(rate_HEDO), { content: formatCOP(m_HEDO), styles: { halign: 'right' } }]);
+                        if(t.RFD > 0) finBody.push(['Recargo Festivo Diurno (80%)', t.RFD, formatCOP(rate_RFD), { content: formatCOP(m_RFD), styles: { halign: 'right' } }]);
+                        if(t.RFN > 0) finBody.push(['Recargo Festivo Nocturno (115%)', t.RFN, formatCOP(rate_RFN), { content: formatCOP(m_RFN), styles: { halign: 'right' } }]);
+                        if(t.HEDF > 0) finBody.push(['Hora Extra Diurna Festiva (205%)', t.HEDF, formatCOP(rate_HEDF), { content: formatCOP(m_HEDF), styles: { halign: 'right' } }]);
+                        if(t.HENO > 0) finBody.push(['Hora Extra Nocturna Ordinaria (175%)', t.HENO, formatCOP(rate_HENO), { content: formatCOP(m_HENO), styles: { halign: 'right' } }]);
+                        if(t.HENF > 0) finBody.push(['Hora Extra Nocturna Festiva (255%)', t.HENF, formatCOP(rate_HENF), { content: formatCOP(m_HENF), styles: { halign: 'right' } }]);
+                        
+                        finBody.push([{ content: `Auxilio de Transporte (Proporcional a ${payDays} días)`, styles: { halign: 'left', fontStyle: 'bold' } }, '-', '-', { content: formatCOP(earnedTransport), styles: { fontStyle: 'bold', halign: 'right' } }]);
+                        finBody.push([{ content: 'TOTAL DEVENGADO:', colSpan: 3, styles: { halign: 'right', fontStyle: 'bold', fillColor: [219, 234, 254] } }, { content: formatCOP(devengado + earnedTransport), styles: { halign: 'right', fontStyle: 'bold', fillColor: [219, 234, 254] } }]);
+                        finBody.push([{ content: `Deducción Salud (${(pSalud*100).toFixed(1)}%)`, styles: { halign: 'left' } }, '-', '-', { content: `- ${formatCOP(valSalud)}`, styles: { halign: 'right' } }]);
+                        finBody.push([{ content: `Deducción Pensión (${(pPension*100).toFixed(1)}%)`, styles: { halign: 'left' } }, '-', '-', { content: `- ${formatCOP(valPension)}`, styles: { halign: 'right' } }]);
+                        if(descAdic > 0) finBody.push([{ content: 'Otras Deducciones (Préstamos/Fondo)', styles: { halign: 'left' } }, '-', '-', { content: `- ${formatCOP(descAdic)}`, styles: { halign: 'right' } }]);
+                        
+                        finBody.push([{ content: 'NETO DE LEY (DEBIDO):', colSpan: 3, styles: { halign: 'right', fontStyle: 'bold', fillColor: [203, 213, 225] } }, { content: formatCOP(netoEsperadoReal), styles: { halign: 'right', fontStyle: 'bold', fillColor: [203, 213, 225] } }]);
+                        finBody.push([{ content: 'VALOR REALMENTE CONSIGNADO POR EMPRESA:', colSpan: 3, styles: { halign: 'right', fontStyle: 'bold' } }, { content: formatCOP(pagadoReal), styles: { halign: 'right', fontStyle: 'bold' } }]);
+                        
+                        let colorDif = difPeriodo > 0 ? [220, 38, 38] : [0,0,0]; // Rojo si deben
+                        finBody.push([{ content: 'FALTANTE (DEUDA) DEL PERIODO:', colSpan: 3, styles: { halign: 'right', fontStyle: 'bold', textColor: colorDif } }, { content: formatCOP(difPeriodo), styles: { halign: 'right', fontStyle: 'bold', textColor: colorDif } }]);
+
+                        doc.autoTable({
+                            startY: cursorY,
+                            margin: { left: margin, right: margin },
+                            theme: 'grid',
+                            headStyles: { fillColor: [241, 245, 249], textColor: [0,0,0], fontStyle: 'bold' },
+                            styles: { fontSize: 8, halign: 'center', cellPadding: 2.5 },
+                            columnStyles: { 0: { halign: 'left' } },
+                            head: [['Concepto Remunerativo', 'Cant.', 'Tarifa Unitaria', 'Subtotal COP']],
+                            body: finBody
+                        });
+
+                        cursorY = doc.lastAutoTable.finalY + 20;
+                        contadorPeriodo++;
+                    }
+
+                    // --- 8. CONSOLIDADO FINAL (Sumatoria de todos los periodos) ---
+                    if (cursorY > doc.internal.pageSize.getHeight() - 250) { doc.addPage(); cursorY = 50; }
+
+                    drawText("CAPÍTULO V: DESGLOSE CONSOLIDADO FINAL (Suma de Todos los Periodos)", 12, true);
+                    cursorY += 5;
+                    drawText("Matriz unificada que detalla el origen exacto del TOTAL NETO DE LEY, consolidando todas las horas laboradas (Trazabilidad Operativa) y la suma financiera de todos los periodos auditados.", 9.5, false);
+                    cursorY += 15;
+
+                    // Consolidado Horizontal de Horas
+                    doc.autoTable({
+                        startY: cursorY,
+                        margin: { left: margin, right: margin },
+                        theme: 'grid',
+                        headStyles: { fillColor: [44, 62, 80], textColor: [255,255,255], fontStyle: 'bold' },
+                        styles: { fontSize: 8.5, halign: 'center', cellPadding: 4 },
+                        head: [['Total HN', 'Total RNO', 'Total HEDO', 'Total RFD', 'Total RFN', 'Total HEDF', 'Total HENO', 'Total HENF']],
+                        body: [[
+                            globalTotals.HN, globalTotals.RNO, globalTotals.HEDO, globalTotals.RFD, 
+                            globalTotals.RFN, globalTotals.HEDF, globalTotals.HENO, globalTotals.HENF
+                        ]]
+                    });
+                    cursorY = doc.lastAutoTable.finalY + 10;
+
+                    // Consolidado Vertical Financiero
+                    let consBody = [];
+                    consBody.push([{ content: `Salario Base Acumulado (${globalTotals.payDays} días base CST)`, styles: { halign: 'left', fontStyle: 'bold' } }, '-', { content: formatCOP(globalTotals.base), styles: { fontStyle: 'bold', halign: 'right' } }]);
+                    
+                    if(globalTotals.RNO > 0) consBody.push(['Recargo Nocturno Ordinario Total', globalTotals.RNO, { content: formatCOP(globalTotals.m_RNO), styles: { halign: 'right' } }]);
+                    if(globalTotals.HEDO > 0) consBody.push(['Hora Extra Diurna Ordinaria Total', globalTotals.HEDO, { content: formatCOP(globalTotals.m_HEDO), styles: { halign: 'right' } }]);
+                    if(globalTotals.RFD > 0) consBody.push(['Recargo Festivo Diurno Total', globalTotals.RFD, { content: formatCOP(globalTotals.m_RFD), styles: { halign: 'right' } }]);
+                    if(globalTotals.RFN > 0) consBody.push(['Recargo Festivo Nocturno Total', globalTotals.RFN, { content: formatCOP(globalTotals.m_RFN), styles: { halign: 'right' } }]);
+                    if(globalTotals.HEDF > 0) consBody.push(['Hora Extra Diurna Festiva Total', globalTotals.HEDF, { content: formatCOP(globalTotals.m_HEDF), styles: { halign: 'right' } }]);
+                    if(globalTotals.HENO > 0) consBody.push(['Hora Extra Nocturna Ordinaria Total', globalTotals.HENO, { content: formatCOP(globalTotals.m_HENO), styles: { halign: 'right' } }]);
+                    if(globalTotals.HENF > 0) consBody.push(['Hora Extra Nocturna Festiva Total', globalTotals.HENF, { content: formatCOP(globalTotals.m_HENF), styles: { halign: 'right' } }]);
+                    
+                    consBody.push([{ content: `Auxilio de Transporte Acumulado`, styles: { halign: 'left', fontStyle: 'bold' } }, '-', { content: formatCOP(globalTotals.transport), styles: { fontStyle: 'bold', halign: 'right' } }]);
+                    
+                    consBody.push([{ content: 'TOTAL DEVENGADO CONSOLIDADO:', colSpan: 2, styles: { halign: 'right', fontStyle: 'bold', fillColor: [219, 234, 254] } }, { content: formatCOP(globalTotals.devengado + globalTotals.transport), styles: { halign: 'right', fontStyle: 'bold', fillColor: [219, 234, 254] } }]);
+                    
+                    consBody.push([{ content: `Deducción Salud Consolidada Total`, styles: { halign: 'left' } }, '-', { content: `- ${formatCOP(globalTotals.salud)}`, styles: { halign: 'right' } }]);
+                    consBody.push([{ content: `Deducción Pensión Consolidada Total`, styles: { halign: 'left' } }, '-', { content: `- ${formatCOP(globalTotals.pension)}`, styles: { halign: 'right' } }]);
+                    
+                    let netoLeyPuro = globalTotals.devengado + globalTotals.transport - globalTotals.salud - globalTotals.pension;
+                    consBody.push([{ content: 'TOTAL NETO DE LEY GENERADO (Antes de deducciones extras):', colSpan: 2, styles: { halign: 'right', fontStyle: 'bold', fillColor: [203, 213, 225] } }, { content: formatCOP(netoLeyPuro), styles: { halign: 'right', fontStyle: 'bold', fillColor: [203, 213, 225] } }]);
+
+                    doc.autoTable({
+                        startY: cursorY,
+                        margin: { left: margin, right: margin },
+                        theme: 'grid',
+                        headStyles: { fillColor: [241, 245, 249], textColor: [0,0,0], fontStyle: 'bold' },
+                        styles: { fontSize: 8.5, halign: 'center', cellPadding: 3.5 },
+                        columnStyles: { 0: { halign: 'left' } },
+                        head: [['Concepto Remunerativo Consolidado', 'Suma de Horas', 'Suma Subtotal COP']],
+                        body: consBody
+                    });
+
+                    cursorY = doc.lastAutoTable.finalY + 20;
+
+                    // --- 9. ANÁLISIS TÉCNICO Y CONCLUSIÓN ---
+                    if (cursorY > doc.internal.pageSize.getHeight() - 250) { doc.addPage(); cursorY = 50; }
+
+                    drawText("CAPÍTULO VI: ANÁLISIS TÉCNICO, AFECTACIÓN AL IBC Y CONCLUSIÓN", 11, true);
+                    cursorY += 5;
+
+                    let analisisTexto =
+                        "1. ANÁLISIS TÉCNICO DE LA DIFERENCIA SALARIAL:\n" +
+                        "Se observa técnicamente que el empleador remuneró el trabajo de manera deficitaria, presuntamente encubriendo u omitiendo el reporte de HEDO, HENO y recargos bajo figuras de salario ordinario fijo o compensaciones no permitidas por el CST. Esto generó un detrimento patrimonial continuo al trabajador.\n\n" +
+                        "2. AFECTACIÓN PRESTACIONAL Y AL INGRESO BASE DE COTIZACIÓN (IBC):\n" +
+                        "El déficit comprobado en este informe no solo afecta el salario directo, sino que al omitirse el reporte real del trabajo suplementario, la empresa disminuyó artificialmente el IBC del trabajador. Esto repercute negativamente, y en cadena, sobre la liquidación histórica de:\n" +
+                        "  • Prima de Servicios, Auxilio de Cesantías e Intereses a las Cesantías.\n" +
+                        "  • Aportes al Sistema de Seguridad Social (Pensión y Salud).\n\n" +
+                        "3. CONCLUSIÓN TÉCNICA FORENSE:\n" +
+                        "Del análisis matemático, cronológico y normativo efectuado sobre los registros operativos aportados, se determina técnicamente que el empleador omitió reconocer integralmente el trabajo suplementario y recargos legales, generando el siguiente detrimento salarial consolidado verificable:";
+                    
+                    drawText(analisisTexto, 9.5, false);
+                    cursorY += 15;
+
+                    doc.autoTable({
+                        startY: cursorY,
+                        margin: { left: margin, right: margin },
+                        theme: 'grid',
+                        styles: { fontSize: 10, cellPadding: 4 },
+                        columnStyles: { 1: { halign: 'right' } },
+                        body: [
+                            [{ content: 'A. TOTAL NETO DE LEY GENERADO (Según Auditoría Operativa):', styles: { fontStyle: 'bold', fillColor: [241, 245, 249] } }, { content: formatCOP(netoLeyPuro), styles: { fontStyle: 'bold', fillColor: [241, 245, 249] } }],
+                            [{ content: 'B. DESGLOSE EXACTO Y DETALLADO DE VALORES CONSIGNADOS Y DESCUENTOS:', colSpan: 2, styles: { fontStyle: 'bold', textColor: [0,0,0], fillColor: [226, 232, 240] } }],
+                            [{ content: '   (-) Me hicieron descuento de préstamos / otras deducciones por valor de:', styles: { fontStyle: 'italic' } }, `- ${formatCOP(globalTotals.otrasDeducciones)}`],
+                            [{ content: '   (=) Saldo Neto que debió ser consignado en mi cuenta (A - Préstamos):', styles: { fontStyle: 'bold' } }, formatCOP(auditState.netoLeyGlobal)],
+                            [{ content: '   (-) TOTAL VALORES CONSIGNADOS (Pagado por el Empleador a mi cuenta):', styles: { fontStyle: 'normal' } }, `- ${formatCOP(auditState.pagadoGlobal)}`],
+                            [{ content: 'C. DIFERENCIA SALARIAL FINAL (Faltante a favor del trabajador):', styles: { fontStyle: 'bold', textColor: [255,255,255], fillColor: [44, 62, 80] } }, { content: formatCOP(auditState.deudaGlobal), styles: { fontStyle: 'bold', textColor: [255,255,255], fillColor: [44, 62, 80] } }]
+                        ]
+                    });
+
+                    cursorY = doc.lastAutoTable.finalY + 15;
+                    
+                    // --- 10. PRETENSIONES Y ANEXOS ---
+                    if (cursorY > doc.internal.pageSize.getHeight() - 150) { doc.addPage(); cursorY = 50; }
+
+                    let verboPetitorio = globalDeuda > 0 ? "EL PAGO INMEDIATO del faltante" : "EL RECONOCIMIENTO del excedente";
+                    drawText("CAPÍTULO VII: PRETENSIONES Y ANEXOS PROBATORIOS", 11, true);
+                    cursorY += 5;
+                    drawText(`Por lo expuesto y materialmente analizado, solicito:`, 10, false);
+                    cursorY += 5;
+                    
+                    let pretensiones = `1. ${verboPetitorio} consolidado arriba indicado por valor de ${formatCOP(Math.abs(globalDeuda))}.\n` +
+                                       `2. LA RELIQUIDACIÓN DE PRESTACIONES SOCIALES y aportes a Seguridad Social en base al IBC real aquí demostrado.\n` +
+                                       `3. SANCIONES ADMINISTRATIVAS: Iniciar vigilancia a la empresa por retención de salarios (Circular 0040 e indemnización Art. 65 CST).`;
+                    
+                    drawText(pretensiones, 9.5, false);
+                    cursorY += 15;
+
+                    drawText("ANEXOS PROBATORIOS RELACIONADOS:", 10, true);
+                    cursorY += 5;
+                    let anexos = "Para soportar este informe técnico de parte, se anexan o se ponen a disposición los siguientes elementos materiales:\n" +
+                                 "  [ ] Comprobantes / Desprendibles de nómina emitidos por la empresa.\n" +
+                                 "  [ ] Extractos bancarios que demuestran el pago real deficitario.\n" +
+                                 "  [ ] Cuadros de turno, minutas de programación o registros biométricos.\n" +
+                                 "  [ ] Comunicaciones operativas (WhatsApp/Correos) de asignación de turnos.";
+                    drawText(anexos, 9.5, false);
+                    cursorY += 50; // Espacio para firma
+
+                    // Firma
+                    if (cursorY > doc.internal.pageSize.getHeight() - 60) { doc.addPage(); cursorY = 80; }
+                    
+                    doc.setLineWidth(1);
+                    doc.line(margin, cursorY, margin + 200, cursorY); // Línea de firma
+                    cursorY += 15;
+                    drawText(vNombre, 10, true);
+                    drawText(`C.C. ${vCedula} de ${vCiudad}\nTrabajador / Accionante`, 10, false);
+
+                    // --- 11. Numeración de páginas en el pie ---
+                    const totalPages = doc.internal.getNumberOfPages();
+                    for (let i = 1; i <= totalPages; i++) {
+                        doc.setPage(i);
+                        doc.setFontSize(8);
+                        doc.setTextColor(150, 150, 150);
+                        doc.text(`Página ${i} de ${totalPages} - Informe Técnico de Parte - Generado bajo parámetros CST`, pageWidth / 2, doc.internal.pageSize.getHeight() - 20, { align: 'center' });
+                    }
+
+                    // Descargar PDF final
+                    doc.save('Informe_Tecnico_Laboral_Nomina.pdf');
+                    
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+
+                } catch(err) {
+                    console.error("Error al exportar documento técnico nativo:", err);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    alert("Hubo un error al compilar el PDF vectorial.");
+                }
+            }, 500); // Pequeño retraso visual
         }
     </script>
 </body>
