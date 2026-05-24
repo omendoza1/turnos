@@ -6,6 +6,8 @@
     <title>Secuencia de Turnos y Liquidación Ley 2026</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,600,700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Librería html2pdf para exportar a PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <style>
         /* ==================== ESTILOS GENERALES ==================== */
@@ -50,12 +52,10 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             overflow-x: auto;
             white-space: nowrap;
-            -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+            -webkit-overflow-scrolling: touch;
         }
 
-        nav::-webkit-scrollbar {
-            height: 4px;
-        }
+        nav::-webkit-scrollbar { height: 4px; }
         nav::-webkit-scrollbar-thumb {
             background-color: rgba(255, 255, 255, 0.3);
             border-radius: 4px;
@@ -73,7 +73,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            flex-shrink: 0; /* Evita que los botones se compriman */
+            flex-shrink: 0;
         }
 
         nav button:hover, nav button.active {
@@ -90,9 +90,7 @@
             animation: fadeIn 0.4s ease-in-out;
         }
 
-        .section-container.active {
-            display: block;
-        }
+        .section-container.active { display: block; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(15px); }
@@ -122,14 +120,9 @@
             gap: 1.5rem;
         }
 
-        .full-width {
-            grid-column: 1 / -1;
-        }
+        .full-width { grid-column: 1 / -1; }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
+        .form-group { display: flex; flex-direction: column; }
 
         label {
             font-size: 1rem;
@@ -151,9 +144,7 @@
             box-sizing: border-box;
         }
         
-        input:focus, select:focus {
-            border-color: var(--accent-color);
-        }
+        input:focus, select:focus { border-color: var(--accent-color); }
 
         .btn-container {
             grid-column: 1 / -1;
@@ -184,6 +175,12 @@
         .btn-danger { background-color: var(--danger-color); }
         .btn-danger:hover:not(:disabled) { background-color: var(--danger-hover); transform: translateY(-2px); }
 
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover:not(:disabled) { background-color: #219653; transform: translateY(-2px); }
+
+        .btn-dark { background-color: #34495e; color: white; }
+        .btn-dark:hover:not(:disabled) { background-color: #2c3e50; transform: translateY(-2px); }
+
         button:disabled {
             cursor: not-allowed;
             opacity: 0.5;
@@ -191,6 +188,11 @@
         }
 
         /* ==================== TABLAS DE TURNOS ==================== */
+        .payroll-slip, .table-responsive, .audit-box, .consolidation-box, .legend {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
         .legend {
             background-color: #e8f4f8;
             padding: 1.5rem;
@@ -294,17 +296,8 @@
             margin-bottom: 1.5rem;
         }
 
-        .payroll-header h2 {
-            margin: 0;
-            font-size: 1.4rem;
-            text-align: left;
-        }
-        
-        .payroll-header-info {
-            text-align: right;
-            color: #7f8c8d;
-            font-size: 0.9rem;
-        }
+        .payroll-header h2 { margin: 0; font-size: 1.4rem; text-align: left; }
+        .payroll-header-info { text-align: right; color: #7f8c8d; font-size: 0.9rem; }
 
         .payroll-row {
             display: flex;
@@ -370,12 +363,7 @@
             animation: fadeIn 0.5s ease-in-out;
         }
 
-        .consolidation-box h2 {
-            color: white;
-            margin-bottom: 1rem;
-            font-size: 1.8rem;
-        }
-
+        .consolidation-box h2 { color: white; margin-bottom: 1rem; font-size: 1.8rem; }
         .consolidation-amount {
             font-size: 2.2rem;
             font-weight: bold;
@@ -385,46 +373,37 @@
             background: rgba(255,255,255,0.1);
         }
 
-        /* ==================== ALERTAS Y MENSAJES ==================== */
-        .instruction-list {
-            list-style: none;
-            counter-reset: step;
-        }
-        .instruction-list li {
-            position: relative;
-            padding-left: 50px;
-            margin-bottom: 1.5rem;
+        /* ==================== ESTILOS DOCUMENTO LEGAL (PDF) ==================== */
+        .legal-document {
+            font-family: 'Times New Roman', Times, serif;
+            color: black;
+            line-height: 1.6;
+            text-align: justify;
             background: white;
-            padding-top: 15px;
-            padding-bottom: 15px;
-            padding-right: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 40px;
         }
-        .instruction-list li::before {
-            counter-increment: step;
-            content: counter(step);
-            position: absolute;
-            left: 10px;
-            top: 15px;
-            width: 30px;
-            height: 30px;
-            background-color: var(--accent-color);
-            color: white;
-            font-weight: bold;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .legal-document h3, .legal-document h4 { 
+            text-align: center; 
+            color: black; 
+            margin-bottom: 15px; 
+            font-weight: bold; 
         }
-        
+        .legal-document h4 { text-align: left; margin-top: 20px; font-size: 13pt; text-decoration: underline; }
+        .legal-document p { margin-bottom: 15px; font-size: 12pt; }
+        .legal-document table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10pt; page-break-inside: auto; }
+        .legal-document tr { page-break-inside: avoid; page-break-after: auto; }
+        .legal-document thead { display: table-header-group; }
+        .legal-document th, .legal-document td { border: 1px solid #000; padding: 5px; text-align: center; }
+        .legal-document th { background-color: #f0f0f0; font-weight: bold; }
+        .legal-document ul, .legal-document ol { margin-left: 40px; margin-bottom: 15px; font-size: 12pt; }
+
+        /* ==================== ALERTAS Y MENSAJES ==================== */
         .alert-info, .alert-warning, .alert-success, .alert-danger {
             padding: 1rem;
             border-radius: 5px;
             margin-bottom: 1.5rem;
             font-size: 0.95rem;
         }
-
         .alert-info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
         .alert-warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
         .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
@@ -432,7 +411,7 @@
 
         /* ==================== MEDIA QUERIES PARA CELULARES ==================== */
         @media (max-width: 768px) {
-            html { font-size: 14.5px; } /* Ajuste tipográfico general para ganar espacio */
+            html { font-size: 14.5px; } 
 
             nav { justify-content: flex-start; }
             nav button { padding: 0.8rem 1rem; font-size: 0.95rem; }
@@ -444,15 +423,15 @@
             h2 { font-size: 1.3rem; }
             
             .form-grid { grid-template-columns: 1fr; gap: 1rem; }
-            
             .btn-container { flex-direction: column; }
             button.action-btn { width: 100%; padding: 1rem; font-size: 1.15rem; }
+
+            #exportContainer { justify-content: center !important; }
 
             .payroll-slip { padding: 1.2rem; }
             .payroll-header { flex-direction: column; align-items: flex-start; gap: 5px; }
             .payroll-header-info { text-align: left; }
             
-            /* Ajuste de filas de nómina para evitar sobreposición en móviles */
             .payroll-row:not(.subtotal) { 
                 flex-direction: column; 
                 align-items: flex-start !important; 
@@ -468,9 +447,34 @@
             .payroll-row.subtotal span:last-child { font-size: 1.1rem; }
 
             .payroll-total { flex-direction: column; text-align: center; gap: 10px; }
-            
             .legend ul { grid-template-columns: 1fr; }
             .badge { display: inline-block; margin-left: 0; margin-top: 5px; }
+        }
+
+        /* ==================== ESTILOS PARA IMPRESIÓN Y PDF NATIVO ==================== */
+        @media print {
+            body { background-color: white !important; color: black; }
+            nav, #exportContainer, .card form, .alert-info, .alert-warning { display: none !important; }
+            .section-container { padding: 0 !important; margin: 0 !important; display: block !important; }
+            #config, #manual { display: none !important; }
+            
+            .card, .payroll-slip, .table-responsive, .legend, .audit-box, .consolidation-box {
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            .consolidation-box {
+                background-color: #f8f9fa !important;
+                color: #333 !important;
+            }
+            .consolidation-box h2, .consolidation-amount { color: #333 !important; }
+            .payroll-total {
+                background-color: #eee !important;
+                color: black !important;
+                border: 2px solid #333;
+            }
+            button { display: none !important; }
         }
     </style>
 </head>
@@ -479,7 +483,7 @@
     <!-- Menú de Navegación -->
     <nav>
         <button id="btn-calc" class="active" onclick="switchTab('calc')"><i class="fas fa-calendar-alt"></i> Turnos y Liquidación</button>
-        <button id="btn-config" onclick="switchTab('config')"><i class="fas fa-cog"></i> Configuración Salarial</button>
+        <button id="btn-config" onclick="switchTab('config')"><i class="fas fa-cog"></i> Configuración Salarial / Legal</button>
         <button id="btn-manual" onclick="switchTab('manual')"><i class="fas fa-book"></i> Manual e Info Legal</button>
     </nav>
 
@@ -536,21 +540,72 @@
             </form>
         </div>
         
-        <!-- Aquí se inyectan las tablas de turnos -->
-        <div id="result"></div>
-        
-        <!-- Aquí se inyecta la nómina y la auditoría -->
-        <div id="payroll-container"></div>
+        <!-- Botones de Exportación (Invisibles hasta calcular) -->
+        <div id="exportContainer" style="display: none; justify-content: flex-end; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+            <button class="action-btn" onclick="window.print()" style="display: flex; width: auto; padding: 0.6rem 1.2rem; font-size: 1rem; background-color: #7f8c8d; color: white;" title="Imprimir o Guardar como PDF del sistema">
+                <i class="fas fa-print"></i> Imprimir Reporte
+            </button>
+            <button id="exportPdfBtn" class="action-btn btn-success" onclick="exportToPDF()" style="display: flex; width: auto; padding: 0.6rem 1.2rem; font-size: 1rem;">
+                <i class="fas fa-file-pdf"></i> Descargar PDF Nómina
+            </button>
+            <button id="exportLegalBtn" class="action-btn btn-dark" onclick="exportLegalPDF()" style="display: none; width: auto; padding: 0.6rem 1.2rem; font-size: 1rem; border: 2px solid #e74c3c; animation: fadeIn 0.5s;">
+                <i class="fas fa-gavel"></i> Descargar Reclamación MinTrabajo
+            </button>
+        </div>
+
+        <!-- Contenedor que será exportado al PDF del REPORTE NORMAL -->
+        <div id="report-content" style="background-color: var(--bg-color); padding: 5px; border-radius: 8px;">
+            <!-- Aquí se inyectan las tablas de turnos -->
+            <div id="result"></div>
+            
+            <!-- Aquí se inyecta la nómina y la auditoría -->
+            <div id="payroll-container"></div>
+        </div>
     </div>
 
-    <!-- 2. SECCIÓN: CONFIGURACIÓN SALARIAL -->
+    <!-- CONTENEDOR OCULTO PARA LA CARTA LEGAL -->
+    <div id="legal-document-wrapper" style="display: none;">
+        <div id="legal-content" class="legal-document"></div>
+    </div>
+
+    <!-- 2. SECCIÓN: CONFIGURACIÓN SALARIAL Y DATOS LEGALES -->
     <div id="config" class="section-container">
-        <h1><i class="fas fa-sliders-h"></i> Configuración Salarial</h1>
+        <h1><i class="fas fa-sliders-h"></i> Configuración y Datos Legales</h1>
         
         <div class="card">
+            <h2 style="text-align: left; font-size: 1.3rem;"><i class="fas fa-user-tie"></i> Datos para Informe Legal</h2>
+            <div class="alert-info">
+                <strong><i class="fas fa-info-circle"></i> Importante:</strong> Llene estos datos. Si la auditoría detecta que la empresa le debe dinero, el sistema redactará automáticamente una reclamación legal formal lista para presentar al Ministerio del Trabajo.
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Su Nombre Completo:</label>
+                    <input type="text" id="cfgName" placeholder="Ej. Juan Pérez">
+                </div>
+                <div class="form-group">
+                    <label>Su Cédula de Ciudadanía:</label>
+                    <input type="text" id="cfgCedula" placeholder="Ej. 1.000.000.000">
+                </div>
+                <div class="form-group">
+                    <label>Ciudad de Radicación (Para MinTrabajo):</label>
+                    <input type="text" id="cfgCiudad" placeholder="Ej. Bogotá D.C.">
+                </div>
+                <div class="form-group">
+                    <label>Razón Social de la Empresa:</label>
+                    <input type="text" id="cfgEmpresa" placeholder="Ej. Seguridad Nacional Ltda.">
+                </div>
+                <div class="form-group">
+                    <label>NIT de la Empresa:</label>
+                    <input type="text" id="cfgNit" placeholder="Ej. 900.000.000-1">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 style="text-align: left; font-size: 1.3rem;"><i class="fas fa-money-check-alt"></i> Configuración Salarial</h2>
             <div class="alert-info">
                 <strong><i class="fas fa-balance-scale"></i> Jurisprudencia Aplicada (Ley 1920 y Ley 2466 de 2025):</strong> 
-                Esta herramienta calcula tu salario base sobre el <strong>Mes Comercial (30 días)</strong> según el Código Sustantivo del Trabajo. Los recargos y extras, sin embargo, se suman con exactitud para <strong>todos</strong> los días trabajados en tu secuencia, incluyendo meses de 31 días.
+                Esta herramienta calcula tu salario base sobre el <strong>Mes Comercial (30 días)</strong> según el Código Sustantivo del Trabajo. Los recargos y extras se suman con exactitud para <strong>todos</strong> los días trabajados en tu secuencia.
             </div>
 
             <div class="form-grid">
@@ -589,9 +644,11 @@
             <div class="alert-warning" style="background-color: #e8f4f8; border-color: #b8daff; color: #004085;">
                 <h2><i class="fas fa-gavel"></i> Marco Legal: Circular 0040, CST y Ley 2466</h2>
                 <ul style="margin-top: 10px; margin-left: 20px;">
-                    <li><strong>Mes Comercial (Código Sustantivo del Trabajo):</strong> Todos los meses se liquidan en base a 30 días comerciales. La herramienta detecta automáticamente si seleccionas una quincena (1-15 o 16-fin) y asigna los 15 días comerciales de salario base correspondientes, sin importar si el mes tiene 28, 30 o 31 días.</li>
-                    <li><strong>Pago Día 31 (Ley 1920 de 2018):</strong> Aunque el salario base se congela en 30 días, <em>todos los recargos y horas extras generados el día 31 SÍ son pagos</em>. La tabla de turnos rastrea cada día laborado y suma esos recargos al valor total.</li>
+                    <li><strong>Mes Comercial (Código Sustantivo del Trabajo):</strong> Todos los meses se liquidan en base a 30 días comerciales. La herramienta detecta automáticamente si seleccionas una quincena (1-15 o 16-fin) y asigna los 15 días comerciales de salario base correspondientes.</li>
+                    <li><strong>¿Qué pasa con Febrero (28 o 29 días)?:</strong> Físicamente la segunda quincena de febrero tiene 13 o 14 días. Sin embargo, para efectos del <em>salario base y auxilio de transporte</em>, la herramienta te reconocerá <strong>15 días</strong>.</li>
+                    <li><strong>Pago Día 31 (Ley 1920 de 2018):</strong> Aunque el salario base se congela en 30 días, <em>todos los recargos y horas extras generados el día 31 SÍ son pagos</em>. La tabla de turnos rastrea cada día laborado y suma esos recargos.</li>
                     <li><strong>Límite Semanal y Extras (Circular 0040):</strong> La herramienta no superará 8 horas ordinarias y un máximo de 4 horas extras por turno. Audita automáticamente para no sobrepasar las 60 horas semanales permitidas.</li>
+                    <li><strong>Generación Automática de Prueba Legal:</strong> Al usar la auditoría e ingresar el pago real, si hay deudas, el aplicativo te permite descargar un PDF firmado que sirve como prueba material ante el Ministerio del Trabajo.</li>
                 </ul>
             </div>
         </div>
@@ -702,7 +759,6 @@
             return sequence.slice(0, daysCount);
         }
 
-        // Obtener la semana del año (ISO) para agrupar y validar las 60 horas
         function getISOWeek(date) {
             let d = new Date(date);
             d.setUTCHours(0,0,0,0);
@@ -743,7 +799,6 @@
                 let m = current_date.getUTCMonth();
                 let d = current_date.getUTCDate();
                 
-                // RASTREO SEMANAL PARA LÍMITE DE 60 HORAS
                 let isoWeek = getISOWeek(current_date);
                 let weekYear = y;
                 if (m === 11 && isoWeek === 1) weekYear++;
@@ -798,10 +853,12 @@
             document.getElementById("payPeriod").disabled = true;
             document.getElementById("calculateButton").disabled = true;
             document.getElementById("clearButton").disabled = false;
+            
+            document.getElementById("exportContainer").style.display = 'flex';
         }
 
         // --- RENDERIZADO DE TABLAS ---
-        const formatCOP = (num) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(Math.round(num));
+        const formatCOP = (num) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
 
         function displayResults() {
             let resultDiv = document.getElementById("result");
@@ -809,6 +866,15 @@
             let baseSalary = parseFloat(document.getElementById("cfgBase").value) || 1750905;
             let divisor = parseFloat(document.getElementById("cfgDivisor").value) || 220;
             let vho = baseSalary / divisor;
+
+            let rate_HN = Math.round(vho);
+            let rate_RNO = Math.round(vho * 0.35);
+            let rate_HEDO = Math.round(vho * 1.25);
+            let rate_RFD = Math.round(vho * 0.80);
+            let rate_RFN = Math.round(vho * 1.15);
+            let rate_HEDF = Math.round(vho * 2.05);
+            let rate_HENO = Math.round(vho * 1.75);
+            let rate_HENF = Math.round(vho * 2.55);
 
             let exceededWeeks = [];
             for (let [week, totalH] of weeklyHoursTracker) {
@@ -837,16 +903,16 @@
 
             resultDiv.innerHTML = complianceAlertHtml + `
                 <div class="legend">
-                    <h3><i class="fas fa-info-circle"></i> Valores de Hora (Reforma):</h3>
+                    <h3><i class="fas fa-info-circle"></i> Valores Unitarios de Hora (Reforma):</h3>
                     <ul>
-                        <li><strong>HN:</strong> Hora Normal (8h) <br><strong style="color:var(--accent-color);">${formatCOP(vho)}</strong></li>
-                        <li><strong>RNO:</strong> Rec. Nocturno Ordinario (35%) <br><strong style="color:var(--accent-color);">${formatCOP(vho * 0.35)}</strong></li>
-                        <li><strong>HEDO:</strong> Extra Diurna Ordinaria (125%) <br><strong style="color:var(--accent-color);">${formatCOP(vho * 1.25)}</strong></li>
-                        <li><strong>RFD:</strong> Rec. Festivo Diurno <strong>(80%)</strong> <br><strong style="color:var(--accent-color);">${formatCOP(vho * 0.80)}</strong></li>
-                        <li><strong>RFN:</strong> Rec. Festivo Nocturno <strong>(115%)</strong> <br><strong style="color:var(--accent-color);">${formatCOP(vho * 1.15)}</strong></li>
-                        <li><strong>HEDF:</strong> Extra Diurna Festiva <strong>(205%)</strong> <br><strong style="color:var(--accent-color);">${formatCOP(vho * 2.05)}</strong></li>
-                        <li><strong>HENO:</strong> Extra Nocturna Ordinaria (175%) <br><strong style="color:var(--accent-color);">${formatCOP(vho * 1.75)}</strong></li>
-                        <li><strong>HENF:</strong> Extra Nocturna Festiva <strong>(255%)</strong> <br><strong style="color:var(--accent-color);">${formatCOP(vho * 2.55)}</strong></li>
+                        <li><strong>HN:</strong> Hora Normal (8h) <br><strong style="color:var(--accent-color);">${formatCOP(rate_HN)}</strong></li>
+                        <li><strong>RNO:</strong> Rec. Nocturno Ordinario (35%) <br><strong style="color:var(--accent-color);">${formatCOP(rate_RNO)}</strong></li>
+                        <li><strong>HEDO:</strong> Extra Diurna Ordinaria (125%) <br><strong style="color:var(--accent-color);">${formatCOP(rate_HEDO)}</strong></li>
+                        <li><strong>RFD:</strong> Rec. Festivo Diurno <strong>(80%)</strong> <br><strong style="color:var(--accent-color);">${formatCOP(rate_RFD)}</strong></li>
+                        <li><strong>RFN:</strong> Rec. Festivo Nocturno <strong>(115%)</strong> <br><strong style="color:var(--accent-color);">${formatCOP(rate_RFN)}</strong></li>
+                        <li><strong>HEDF:</strong> Extra Diurna Festiva <strong>(205%)</strong> <br><strong style="color:var(--accent-color);">${formatCOP(rate_HEDF)}</strong></li>
+                        <li><strong>HENO:</strong> Extra Nocturna Ordinaria (175%) <br><strong style="color:var(--accent-color);">${formatCOP(rate_HENO)}</strong></li>
+                        <li><strong>HENF:</strong> Extra Nocturna Festiva <strong>(255%)</strong> <br><strong style="color:var(--accent-color);">${formatCOP(rate_HENF)}</strong></li>
                     </ul>
                 </div>
             `;
@@ -885,9 +951,107 @@
             }
         }
 
-        // --- LIQUIDACIÓN FINANCIERA AUTOMÁTICA Y AUDITORÍA ---
+        // --- GENERADOR DE INFORME LEGAL ---
+        function generateLegalReport(totalNetoLey, totalPagado, globalDeuda) {
+            const btnLegal = document.getElementById('exportLegalBtn');
+            // Solo generar la carta si la empresa debe más de 100 pesos
+            if (globalDeuda <= 100) { 
+                btnLegal.style.display = 'none'; 
+                return; 
+            } 
+
+            btnLegal.style.display = 'flex'; 
+            let legalDiv = document.getElementById("legal-content");
+            
+            // Traer variables de configuración ingresadas por el usuario
+            let vNombre = document.getElementById("cfgName").value || "[NOMBRE DEL TRABAJADOR]";
+            let vCedula = document.getElementById("cfgCedula").value || "[NÚMERO DE CÉDULA]";
+            let vCiudad = document.getElementById("cfgCiudad").value || "[CIUDAD]";
+            let vEmpresa = document.getElementById("cfgEmpresa").value || "[NOMBRE DE LA EMPRESA]";
+            let vNit = document.getElementById("cfgNit").value || "[NIT DE LA EMPRESA]";
+            
+            let vBase = parseFloat(document.getElementById("cfgBase").value) || 1750905;
+            let vTransp = parseFloat(document.getElementById("cfgTransport").value) || 249095;
+            
+            // Detectar si el cálculo es quincenal o mensual para el texto de la carta
+            let tipoPeriodo = document.getElementById("payPeriod").value;
+            let textoPeriodoDesc = tipoPeriodo === "mensual" ? "los meses" : "las quincenas";
+
+            // Construir tablas de horas trabajadas para insertarlas en el documento legal
+            let tablasHtml = '';
+            for (let [key, group] of shiftGroups) {
+                tablasHtml += `<h4>PERIODO LÍQUIDADO: ${group.label}</h4><table><thead><tr><th>Fecha Física</th><th>Turno Real</th><th>HN</th><th>RNO</th><th>HEDO</th><th>RFD</th><th>RFN</th><th>HEDF</th><th>HENO</th><th>HENF</th></tr></thead><tbody>`;
+                for (let s of group.shifts) {
+                    let dStr = s.date.toISOString().slice(0, 10);
+                    let h = s.hours;
+                    tablasHtml += `<tr><td>${dStr} ${isFestive(s.date)?"(Festivo)":""}</td><td>${s.shift.toUpperCase()}</td><td>${h.HN||"-"}</td><td>${h.RNO||"-"}</td><td>${h.HEDO||"-"}</td><td>${h.RFD||"-"}</td><td>${h.RFN||"-"}</td><td>${h.HEDF||"-"}</td><td>${h.HENO||"-"}</td><td>${h.HENF||"-"}</td></tr>`;
+                }
+                let t = group.totals;
+                tablasHtml += `<tr><td colspan="2"><b>TOTAL PERIODO</b></td><td><b>${t.HN}</b></td><td><b>${t.RNO}</b></td><td><b>${t.HEDO}</b></td><td><b>${t.RFD}</b></td><td><b>${t.RFN}</b></td><td><b>${t.HEDF}</b></td><td><b>${t.HENO}</b></td><td><b>${t.HENF}</b></td></tr>`;
+                tablasHtml += `</tbody></table><br>`;
+            }
+
+            // Construcción del HTML de la carta legal (Estilo Word)
+            let html = `
+                <h3 style="text-align: center;">INFORME TÉCNICO Y RECLAMACIÓN LEGAL POR LIQUIDACIÓN DEFICITARIA DE NÓMINA</h3>
+                <br>
+                <p><strong>Señores:</strong><br>
+                <strong>MINISTERIO DEL TRABAJO</strong> - INSPECTOR DE TRABAJO EN TURNO<br>
+                <strong>Ciudad:</strong> ${vCiudad}</p>
+                <br>
+                <p><strong>Referencia:</strong> Reclamación laboral por reliquidación de nómina, pago deficitario de horas extras/recargos e incumplimiento de la Circular 0040.<br>
+                <strong>Accionante / Trabajador:</strong> ${vNombre} (C.C. ${vCedula})<br>
+                <strong>Empleador / Empresa:</strong> ${vEmpresa} (NIT: ${vNit})</p>
+                <br>
+                <p>Respetado Inspector(a),</p>
+                <p>Actuando en nombre propio, presento formal reclamación y <strong>Auditoría Técnica de Nómina</strong> fundamentada en los registros de turnos efectivamente laborados y los desprendibles de pago emitidos por mi empleador. Mediante el presente documento, demuestro de forma técnica y matemática el pago deficitario sistemático de recargos y horas extras correspondientes a <strong>${textoPeriodoDesc}</strong> detallados a continuación. Este actuar vulnera abiertamente la Ley 1920 de 2018, la Ley 2466 de 2025 y de manera específica, la <strong>Circular 0040 expedida por el Ministerio del Trabajo</strong>, la cual ratifica la obligación ineludible del empleador de llevar un registro detallado de las horas suplementarias y realizar su pago exacto sin vulnerar la jornada máxima.</p>
+                
+                <h4>1. FUNDAMENTOS TÉCNICOS DE LA AUDITORÍA</h4>
+                <ul>
+                    <li><strong>Salario Base Mensual:</strong> ${formatCOP(vBase)}</li>
+                    <li><strong>Auxilio de Transporte:</strong> ${formatCOP(vTransp)}</li>
+                    <li><strong>Regla del Mes Comercial (30 días):</strong> La base salarial se liquidó estrictamente bajo el mandato del Código Sustantivo del Trabajo.</li>
+                    <li><strong>Obligaciones - Circular 0040:</strong> Se contabilizó la totalidad del trabajo suplementario (incluido el día 31, avalado por la Ley 1920) entendiendo que la supresión del permiso previo dictada por el Ministerio <em>"no flexibiliza los límites legales, sino que transforma el papel del Ministerio a una inspección posterior"</em> donde el empleador está obligado a pagar y registrar cada hora extra generada.</li>
+                </ul>
+                <div style="page-break-before: always;"></div>
+                
+                <h4>2. TRAZABILIDAD DETALLADA DE TURNOS LABORADOS</h4>
+                <p>A continuación, se detalla la matriz pericial de los turnos físicos laborados por el accionante:</p>
+                ${tablasHtml}
+                
+                <h4>3. CONSOLIDADO FINANCIERO Y LIQUIDACIÓN DE LEY</h4>
+                <p>Habiendo realizado el cálculo de horas y recargos mostrados en la sección anterior, el valor total dictaminado que el empleador <strong>DEBIÓ</strong> reconocer por ley para los periodos analizados (Base Salarial + Suma de Extras/Recargos de todos los periodos - Deducciones Legales de Salud y Pensión) asciende a: <strong>${formatCOP(totalNetoLey)}</strong>.</p>
+                
+                <h4>4. ANÁLISIS DE AUDITORÍA Y FALTANTE A MI FAVOR</h4>
+                <p>Habiendo cruzado la liquidación de ley frente a los dineros consignados y/o desprendibles de la empresa, arroja el siguiente faltante patrimonial a mi favor:</p>
+                <ul>
+                    <li><strong>Total Neto de Ley (Según Auditoría Matemática):</strong> ${formatCOP(totalNetoLey)}</li>
+                    <li><strong>Total Real Consignado/Pagado por la Empresa:</strong> ${formatCOP(totalPagado)}</li>
+                </ul>
+                <p style="font-size: 14pt; background-color: #f0f0f0; padding: 15px; text-align: center; border: 1px solid black;"><strong>DIFERENCIA / FALTANTE A FAVOR DEL TRABAJADOR: ${formatCOP(globalDeuda)}</strong></p>
+
+                <h4>5. PRETENSIONES</h4>
+                <p>Por lo anteriormente expuesto y probado técnicamente, solicito al Ministerio del Trabajo ordenar a la empresa <strong>${vEmpresa}</strong>:</p>
+                <ol>
+                    <li><strong>EL PAGO INMEDIATO</strong> del faltante consolidado a mi favor por la suma de <strong>${formatCOP(globalDeuda)}</strong>, correspondiente a recargos y horas extras laboradas y no remuneradas.</li>
+                    <li><strong>LA RELIQUIDACIÓN</strong> de mis prestaciones sociales (prima, cesantías, intereses y vacaciones) y aportes a seguridad social, toda vez que al omitir el pago exacto de los recargos mencionados, la empresa disminuyó artificialmente mi Ingreso Base de Cotización (IBC).</li>
+                    <li><strong>SANCIONES Y VIGILANCIA:</strong> Iniciar el proceso de inspección y sanción a la empresa por la retención ilegal de salarios, el no registro o pago íntegro del tiempo suplementario, y por sobrepasar la jornada máxima semanal legal de 60 horas, de estricta observancia y control bajo las directrices de la <strong>Circular 0040 del Ministerio del Trabajo</strong>.</li>
+                </ol>
+                <br><br><br><br>
+                <p>Atentamente,</p>
+                <p>___________________________________________________<br>
+                <strong>${vNombre}</strong><br>
+                C.C. ${vCedula}<br>
+                Anexos: Desprendibles de pago y extractos bancarios que soportan los pagos recibidos.</p>
+            `;
+            legalDiv.innerHTML = html;
+        }
+
+        // --- AUDITORÍA DE PAGOS ---
         function auditPayments() {
-            let totalDebt = 0;
+            let globalDeuda = 0;
+            let globalNetoLey = 0;
+            let globalPagado = 0;
             let auditActive = false;
 
             document.querySelectorAll('.audit-input').forEach(input => {
@@ -907,8 +1071,13 @@
                         auditActive = true;
                         let netoEsperado = netoLey - otrosDescuentos;
                         let diferencia = netoEsperado - pagadoPorEmpresa;
-                        totalDebt += diferencia;
+                        
+                        // Sumar totales globales
+                        globalNetoLey += netoEsperado;
+                        globalPagado += pagadoPorEmpresa;
+                        globalDeuda += diferencia;
 
+                        // UI de resultados individuales
                         if (Math.abs(diferencia) <= 100) {
                             resDiv.innerHTML = `<span style="color: var(--success-color);"><i class="fas fa-check-circle"></i> Cuadre Perfecto. Te pagaron correctamente.</span>`;
                         } else if (diferencia > 100) {
@@ -922,29 +1091,36 @@
                 }
             });
 
+            // UI del resultado global
             let consolBox = document.getElementById('consolidationBox');
             if (auditActive) {
                 consolBox.style.display = 'block';
                 let amountDiv = document.getElementById('consolidationAmount');
                 
-                if (totalDebt > 100) {
+                if (globalDeuda > 100) {
                     consolBox.style.backgroundColor = 'var(--danger-color)';
                     document.getElementById('consolidationTitle').innerText = "Deuda Total de la Empresa a tu Favor";
-                    amountDiv.innerHTML = `${formatCOP(totalDebt)}`;
-                } else if (totalDebt < -100) {
+                    amountDiv.innerHTML = `${formatCOP(globalDeuda)}`;
+                } else if (globalDeuda < -100) {
                     consolBox.style.backgroundColor = 'var(--accent-color)';
                     document.getElementById('consolidationTitle').innerText = "Saldo a Favor de la Empresa (Te pagaron de más)";
-                    amountDiv.innerHTML = `${formatCOP(Math.abs(totalDebt))}`;
+                    amountDiv.innerHTML = `${formatCOP(Math.abs(globalDeuda))}`;
                 } else {
                     consolBox.style.backgroundColor = 'var(--success-color)';
                     document.getElementById('consolidationTitle').innerText = "Auditoría Perfecta";
                     amountDiv.innerHTML = `<i class="fas fa-check"></i> Pagos Exactos`;
                 }
+
+                // Generar reporte legal basado en los consolidados
+                generateLegalReport(globalNetoLey, globalPagado, globalDeuda);
+
             } else {
                 consolBox.style.display = 'none';
+                document.getElementById('exportLegalBtn').style.display = 'none';
             }
         }
 
+        // --- LIQUIDACIÓN FINANCIERA AUTOMÁTICA ---
         function displayPayroll() {
             let container = document.getElementById("payroll-container");
             container.innerHTML = "";
@@ -965,9 +1141,7 @@
                 let t = group.totals;
                 let actualDaysCount = group.daysCount;
                 
-                // --- LÓGICA DE MES COMERCIAL (CST) ---
                 let payDays = actualDaysCount; 
-                
                 let firstDate = group.shifts[0].date;
                 let lastDate = group.shifts[group.shifts.length - 1].date;
                 let d1 = firstDate.getUTCDate();
@@ -976,40 +1150,60 @@
                 let year = firstDate.getUTCFullYear();
                 let lastDayOfMonth = new Date(Date.UTC(year, m1 + 1, 0)).getUTCDate();
 
+                let isFebruary = (m1 === 1); 
+                let monthNotice = "";
+
                 if (payPeriod === "mensual") {
-                    // Mes completo, se paga sobre 30 dias (mes comercial)
-                    if (d1 === 1 && d2 === lastDayOfMonth) payDays = 30;
+                    if (d1 === 1 && d2 === lastDayOfMonth) {
+                        payDays = 30;
+                        if (isFebruary) {
+                            monthNotice = `<div style="background-color: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 4px; margin-top: 15px; font-size: 0.9rem; border: 1px solid #bee5eb;"><i class="fas fa-info-circle"></i> <strong>Ajuste de Febrero (Mes Comercial):</strong> Físicamente el mes tiene ${lastDayOfMonth} días, pero por ley laboral la base salarial se te asegura y liquida sobre <strong>30 días</strong>.</div>`;
+                        } else if (lastDayOfMonth === 31) {
+                            monthNotice = `<div style="background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 4px; margin-top: 15px; font-size: 0.9rem; border: 1px solid #ffeeba;"><i class="fas fa-info-circle"></i> <strong>Ajuste Día 31 (Mes Comercial):</strong> El salario base se congela en 30 días. ¡Tranquilo! Los recargos y extras que generaste el día 31 <strong>SÍ</strong> están incluidos abajo en el detalle.</div>`;
+                        }
+                    }
                 } else if (payPeriod === "quincenal") {
-                    // Quincena 1 (del 1 al 15)
-                    if (d1 === 1 && d2 === 15) payDays = 15;
-                    // Quincena 2 (del 16 a fin de mes), siempre equivale a 15 dias en nomina
-                    else if (d1 === 16 && d2 === lastDayOfMonth) payDays = 15;
-                    // Si se seleccionó el mes entero en vista quincenal (Edge Case)
-                    else if (d1 === 1 && d2 === lastDayOfMonth) payDays = 30;
+                    if (d1 === 1 && d2 === 15) {
+                        payDays = 15;
+                    }
+                    else if (d1 === 16 && d2 === lastDayOfMonth) {
+                        payDays = 15;
+                        if (isFebruary) {
+                            monthNotice = `<div style="background-color: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 4px; margin-top: 15px; font-size: 0.9rem; border: 1px solid #bee5eb;"><i class="fas fa-info-circle"></i> <strong>Ajuste de Febrero (Mes Comercial):</strong> Físicamente trabajaste ${actualDaysCount} días esta quincena, pero por ley la empresa debe pagarte <strong>15 días</strong> de salario base para completar tu mensualidad (30 días).</div>`;
+                        } else if (lastDayOfMonth === 31) {
+                            monthNotice = `<div style="background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 4px; margin-top: 15px; font-size: 0.9rem; border: 1px solid #ffeeba;"><i class="fas fa-info-circle"></i> <strong>Ajuste Día 31 (Mes Comercial):</strong> Esta quincena tiene ${actualDaysCount} días físicos, pero la base se paga sobre 15. Los recargos y extras del día 31 <strong>SÍ</strong> están sumados abajo.</div>`;
+                        }
+                    }
+                    else if (d1 === 1 && d2 === lastDayOfMonth) payDays = 30; 
                 }
                 
-                // Tope comercial general (Ningún mes para base fija paga más de 30 días)
                 if (payDays > 30) payDays = 30;
                 
                 let proportion = payDays / 30;
-                let earnedBase = baseSalary * proportion;
-                let earnedTransport = transport * proportion;
+                let earnedBase = Math.round(baseSalary * proportion);
+                let earnedTransport = Math.round(transport * proportion);
 
-                // --- RECÁRGOS Y EXTRAS (ESTOS SÍ SUMAN EL DÍA 31) ---
-                let money_RNO = t.RNO * vho * 0.35;
-                let money_HEDO = t.HEDO * vho * 1.25;
-                let money_RFD = t.RFD * vho * 0.80;
-                let money_RFN = t.RFN * vho * 1.15;
-                let money_HEDF = t.HEDF * vho * 2.05;
-                let money_HENO = t.HENO * vho * 1.75;
-                let money_HENF = t.HENF * vho * 2.55;
+                let rate_RNO = Math.round(vho * 0.35);
+                let rate_HEDO = Math.round(vho * 1.25);
+                let rate_RFD = Math.round(vho * 0.80);
+                let rate_RFN = Math.round(vho * 1.15);
+                let rate_HEDF = Math.round(vho * 2.05);
+                let rate_HENO = Math.round(vho * 1.75);
+                let rate_HENF = Math.round(vho * 2.55);
+
+                let money_RNO = Math.round(t.RNO * rate_RNO);
+                let money_HEDO = Math.round(t.HEDO * rate_HEDO);
+                let money_RFD = Math.round(t.RFD * rate_RFD);
+                let money_RFN = Math.round(t.RFN * rate_RFN);
+                let money_HEDF = Math.round(t.HEDF * rate_HEDF);
+                let money_HENO = Math.round(t.HENO * rate_HENO);
+                let money_HENF = Math.round(t.HENF * rate_HENF);
                 
                 let totalRecargos = money_RNO + money_HEDO + money_RFD + money_RFN + money_HEDF + money_HENO + money_HENF;
-                
                 let totalDevengado = earnedBase + totalRecargos;
                 
-                let valSalud = totalDevengado * pSalud;
-                let valPension = totalDevengado * pPension;
+                let valSalud = Math.round(totalDevengado * pSalud);
+                let valPension = Math.round(totalDevengado * pPension);
                 let totalDeducciones = valSalud + valPension;
                 
                 let netoPagar = totalDevengado + earnedTransport - totalDeducciones;
@@ -1026,19 +1220,21 @@
                                 <span style="font-size: 0.95rem; color: #555;">${group.label}</span>
                             </div>
                             <div class="payroll-header-info">
-                                Calendario: <strong>${actualDaysCount} días</strong><br>
+                                Calendario: <strong>${actualDaysCount} días físicos</strong><br>
                                 Base Pago CST: <strong>${payDays} días</strong>
                             </div>
                         </div>
                         
-                        <div class="payroll-row bold" style="align-items: center;">
+                        ${monthNotice}
+                        
+                        <div class="payroll-row bold" style="align-items: center; margin-top: 15px;">
                             <span>Salario Base (Mes Comercial)<br>
                                 <span style="font-size: 0.85rem; font-weight: normal; color: #7f8c8d;">(${formatCOP(baseSalary)} / 30 días × ${payDays} días)</span>
                             </span>
                             <span>${formatCOP(earnedBase)}</span>
                         </div>
                         
-                        <div style="margin-top:1rem; color:var(--main-color); font-weight:bold; border-bottom: 1px solid #ddd; padding-bottom: 5px;">Detalle Extras y Recargos (Suman Día 31)</div>
+                        <div style="margin-top:1rem; color:var(--main-color); font-weight:bold; border-bottom: 1px solid #ddd; padding-bottom: 5px;">Detalle Extras y Recargos (Suman Todos los Días Físicos)</div>
                         ${row('Recargo Noct. Ordinario (35%)', t.RNO, money_RNO)}
                         ${row('Hora Extra Diurna Ordinaria (125%)', t.HEDO, money_HEDO)}
                         ${row('Recargo Festivo Diurno (80%)', t.RFD, money_RFD)}
@@ -1110,8 +1306,75 @@
             document.getElementById("clearButton").disabled = true;
             document.getElementById("result").innerHTML = "";
             document.getElementById("payroll-container").innerHTML = "";
+            document.getElementById("exportContainer").style.display = 'none';
+            document.getElementById("exportLegalBtn").style.display = 'none';
+            document.getElementById("legal-content").innerHTML = '';
             shiftGroups.clear();
             weeklyHoursTracker.clear();
+        }
+
+        // --- FUNCIÓN PARA EXPORTAR EL REPORTE DE NÓMINA A PDF ---
+        function exportToPDF() {
+            const btn = document.getElementById("exportPdfBtn");
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando...';
+            btn.disabled = true;
+
+            const element = document.getElementById('report-content');
+            
+            const opt = {
+                margin:       [10, 10, 15, 10],
+                filename:     'Reporte_Liquidacion.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: ['css', 'legacy'] }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }).catch(err => {
+                console.error("Error al exportar PDF:", err);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                alert("Hubo un error al generar el PDF de la nómina.");
+            });
+        }
+
+        // --- FUNCIÓN PARA EXPORTAR LA CERTIFICACIÓN LEGAL A PDF ---
+        function exportLegalPDF() {
+            const btn = document.getElementById("exportLegalBtn");
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando Documento...';
+            btn.disabled = true;
+            
+            const element = document.getElementById('legal-document-wrapper');
+            // Lo mostramos temporalmente para que html2pdf lo pueda capturar correctamente
+            element.style.display = 'block'; 
+            
+            const opt = {
+                margin:       [25, 25, 25, 25], // Márgenes tipo carta formal (Word)
+                filename:     'Reclamacion_Legal_MinTrabajo.pdf',
+                image:        { type: 'jpeg', quality: 1 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' },
+                pagebreak:    { mode: ['css', 'legacy'] }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.style.display = 'none'; // Volver a ocultar el contenedor
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }).catch(err => {
+                console.error("Error al exportar documento legal:", err);
+                element.style.display = 'none';
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                alert("Hubo un error al generar la Reclamación Legal.");
+            });
         }
     </script>
 </body>
